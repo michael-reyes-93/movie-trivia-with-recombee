@@ -1,0 +1,118 @@
+<?php
+  class Actors extends Controller {
+
+    public function __construct() {
+      // if(!isLoggedIn()) {
+      //   redirect('users/login');
+      // }
+
+      $this->personModel = $this->model('Person');
+      // $this->userModel = $this->model('User');
+    }
+
+    public function index() {
+      // Get Actors
+      
+      $actors = '';
+
+      $data = [
+        'actors' => $actors,
+        //'movie_titles' => $movie_titles
+      ];
+
+      $this->view('actors/index', $data);
+
+    }
+
+    public function add() {
+      
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Sanitize POST array
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+        $data = [
+          'name' => trim($_POST['name']),
+          'born' => trim($_POST['born']),
+          'biography' => trim($_POST['biography']),
+          'photo' => $_POST['photo'],
+          'role' => $_POST['role'],
+          'name_err' => '',
+          'born_err' => '',
+          'biography_err' => '',
+          'photo_err' => '',
+          'role_err' => ''
+        ];
+
+        // Validate data
+        if (empty($data['name'])) {
+          $data['name_err'] = 'Please enter name';
+        }
+        if (empty($data['born'])) {
+          $data['born_err'] = 'Please enter brith information';
+        }  
+        if (empty($data['biography'])) {
+          $data['biography_err'] = 'Please enter a biography';
+        }
+        if (!empty($_FILES['uploaded_photo']['name'])) {
+          $data['photo'] = $_FILES['uploaded_photo']['name'];
+        }
+
+        // $check = @getimagesize($_FILES['photo']['tmp_name']);
+        // if ($check === false) {
+        //   $data['poster_err'] = 'Please upload a photo for the actor';
+        // }
+        
+        // if ($check !== false){
+        //     $carpeta_destino = 'fotos/';
+        //     $archivo_subido = $carpeta_destino . $_FILES['foto']['name'];
+        //     move_uploaded_file($_FILES['foto']['tmp_name'], $archivo_subido);
+
+        //     $statement = $conexion->prepare('INSERT INTO fotos (titulo, imagen, texto) VALUES (:titulo, :imagen, :texto)');
+        //     $statement->execute(array(':titulo' => $_POST['titulo'], ':imagen' => $_FILES['foto']['name'], ':texto' => $_POST['texto']));
+        
+        //     header('Location: index.php');
+        // } else {
+        //   $error = "El archivo no es una imagen o el archivo es muy pesado";
+        // }
+        // if (empty($data['story'])) {
+        //   $data['story_err'] = 'Please enter description text';
+        // }
+
+        // Make sure no errors
+        if (empty($data['name_err']) && 
+            empty($data['born_err']) &&
+            empty($data['biography_err']) &&
+            !empty($data['photo']) &&
+            !empty($data['role']))
+        {
+          // $folder = 'img/';
+          // $uploaded_file = $folder . $_FILES['photo']['name'];
+          // move_uploaded_file($_FILES['photo']['tmp_name'], $uploaded_file);
+          // Validated
+          if ($this->personModel->addPerson($data)) {
+            flash('post_message', 'Person Added');
+            redirect('actors');
+          }
+          print_r($data);
+        } else {
+          // Load view with errors
+          $this->view('actors/add', $data);
+        }
+
+      } else {
+
+        //$movie_titles = $this->movieModel->getMoviesTitleWithId();
+
+        $data = [
+          'name' => '',
+          'born' => '',
+          'biography' => '',
+          'photo' => ''
+          //'movie_titles' => $movie_titles
+        ];
+
+        $this->view('actors/add', $data);
+      }
+    }
+
+  }
