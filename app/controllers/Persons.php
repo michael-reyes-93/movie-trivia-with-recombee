@@ -93,7 +93,6 @@
             flash('post_message', 'Person Added');
             redirect('persons');
           }
-          print_r($data);
         } else {
           // Load view with errors
           $this->view('persons/add', $data);
@@ -107,7 +106,8 @@
           'name' => '',
           'born' => '',
           'biography' => '',
-          'photo' => ''
+          'photo' => '',
+          'role' => []
           //'movie_titles' => $movie_titles
         ];
 

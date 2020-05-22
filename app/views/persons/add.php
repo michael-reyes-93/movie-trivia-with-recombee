@@ -37,9 +37,9 @@
       </div>
       <div class="form-group">
         <label for="role">Role: </label>
-        <select multiple class="form-control" name="role[]" id="">
-          <option value="1" selected>actor</option>
-          <option value="2">producer</option>
+        <select class="selectpicker" name="role[]" multiple data-actions-box="true">
+          <option <?php if (in_array(1, $data['role'])) echo 'selected'; ?> value="1">actor</option>
+          <option <?php if (in_array(2, $data['role'])) echo 'selected'; ?> value="2">producer</option>
         </select>
         <span class="invalid-feedback"><?= $data['role_err']; ?></span>
       </div>

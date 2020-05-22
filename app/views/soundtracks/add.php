@@ -25,8 +25,8 @@
           <div class="input-group-prepend">
             <select class="custom-select <?= (!empty($data['selection_singer_group_err'])) ? 'is-invalid' : ''; ?>" name="selection_singer_group">
               <option selected>Choose...</option>
-              <option <?php if ($data['selection_singer_group'] == 1 ) echo 'selected' ; ?> value="1">Singer</option>
-              <option <?php if ($data['selection_singer_group'] == 2 ) echo 'selected' ; ?> value="2">Group</option>
+              <option <?php if ($data['selection_singer_group'] == 1 ) echo 'selected'; ?> value="1">Singer</option>
+              <option <?php if ($data['selection_singer_group'] == 2 ) echo 'selected'; ?> value="2">Group</option>
             </select>
           </div>
           <input type="text" class="form-control <?= (!empty($data['selection_singer_group_err']) || !empty($data['name_singer_group_err']))  ? 'is-invalid' : ''; ?>"  value="<?= $data['name_singer_group']; ?>" placeholder="Name of the group or singer" name="name_singer_group">

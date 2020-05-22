@@ -17,17 +17,29 @@
 
       // Execute
       if ($this->db->execute()) {
-        $this->db->query('INSERT INTO actors (person_id) VALUES (:person_id);');
-
-        // Bind Values
-        $this->db->bind(':person_id', $this->db->lastInsertedId());
+        $results = [];
+        $person_id = $this->db->lastInsertedId();
         
-        // Second Execute
-        if ($this->db->execute()) {
-          return true;
-        } else {
-          return false;
+        if (in_array(1, $data['role'])) {
+          $this->db->query('INSERT INTO actors (person_id) VALUES (:person_id);');
+
+          // Bind Values
+          $this->db->bind(':person_id', $person_id);
+
+          $this->db->execute() ? array_push($results, true) : array_push($results, false);
         }
+
+        if (in_array(2, $data['role'])) {
+          $this->db->query('INSERT INTO producers (person_id) VALUES (:person_id);');
+
+          // Bind Values
+          $this->db->bind(':person_id', $person_id);
+
+          $this->db->execute() ? array_push($results, true) : array_push($results, false);
+        }
+        
+        return in_array(false, $results) ? false : true;
+        
       } else {
         return false;
       }
