@@ -2,9 +2,9 @@
 
   <a href="<?= URLROOT; ?>/movies" class="btn btn-light"><i class="fa fa-backward"></i> Back</a>
   <div class="card card-body bg-light mt-5">
-    <h2>Add Actor</h2>
-    <p>Create an actor with this form</p>
-    <form action="<?= URLROOT; ?>/actors/add" method="post" enctype="multipart/form-data">
+    <h2>Add Person</h2>
+    <p>Create an person with this form</p>
+    <form action="<?= URLROOT; ?>/persons/add" method="post" enctype="multipart/form-data">
       <!-- <div class="form-group">
         <select id="cars">
           <?php foreach($data['movie_titles'] as $movie_title): ?> 

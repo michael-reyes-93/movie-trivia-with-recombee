@@ -1,5 +1,5 @@
 <?php
-  class Actors extends Controller {
+  class Persons extends Controller {
 
     public function __construct() {
       // if(!isLoggedIn()) {
@@ -11,16 +11,16 @@
     }
 
     public function index() {
-      // Get Actors
+      // Get Persons
       
-      $actors = '';
+      $persons = '';
 
       $data = [
-        'actors' => $actors,
+        'persons' => $persons,
         //'movie_titles' => $movie_titles
       ];
 
-      $this->view('actors/index', $data);
+      $this->view('persons/index', $data);
 
     }
 
@@ -91,12 +91,12 @@
           // Validated
           if ($this->personModel->addPerson($data)) {
             flash('post_message', 'Person Added');
-            redirect('actors');
+            redirect('persons');
           }
           print_r($data);
         } else {
           // Load view with errors
-          $this->view('actors/add', $data);
+          $this->view('persons/add', $data);
         }
 
       } else {
@@ -111,7 +111,7 @@
           //'movie_titles' => $movie_titles
         ];
 
-        $this->view('actors/add', $data);
+        $this->view('persons/add', $data);
       }
     }
 
