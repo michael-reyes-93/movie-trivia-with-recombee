@@ -12,8 +12,7 @@
 
     public function index() {
       // Get Persons
-      
-      $persons = '';
+      $persons = $this->personModel->getPersons();
 
       $data = [
         'persons' => $persons,
@@ -35,7 +34,7 @@
           'born' => trim($_POST['born']),
           'biography' => trim($_POST['biography']),
           'photo' => $_POST['photo'],
-          'role' => $_POST['role'],
+          'role' => empty($_POST['role']) ? [] : $_POST['role'],
           'name_err' => '',
           'born_err' => '',
           'biography_err' => '',
@@ -55,6 +54,12 @@
         }
         if (!empty($_FILES['uploaded_photo']['name'])) {
           $data['photo'] = $_FILES['uploaded_photo']['name'];
+        }
+        if (empty($data['photo'])) {
+          $data['photo_err'] = 'Please upload a photo';
+        }
+        if (empty($data['role'])) {
+          $data['role_err'] = 'Please select one or various roles';
         }
 
         // $check = @getimagesize($_FILES['photo']['tmp_name']);
@@ -82,8 +87,8 @@
         if (empty($data['name_err']) && 
             empty($data['born_err']) &&
             empty($data['biography_err']) &&
-            !empty($data['photo']) &&
-            !empty($data['role']))
+            empty($data['photo_err']) &&
+            empty($data['role_err']))
         {
           // $folder = 'img/';
           // $uploaded_file = $folder . $_FILES['photo']['name'];

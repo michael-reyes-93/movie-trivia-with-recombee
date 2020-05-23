@@ -1,6 +1,6 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
-  <a href="<?= URLROOT; ?>/movies" class="btn btn-light"><i class="fa fa-backward"></i> Back</a>
+  <a href="<?= URLROOT; ?>/persons" class="btn btn-light"><i class="fa fa-backward"></i> Back</a>
   <div class="card card-body bg-light mt-5">
     <h2>Add Person</h2>
     <p>Create an person with this form</p>
@@ -35,13 +35,16 @@
         <input type="file" name="uploaded_photo" id="uploaded_photo" class="form-control-file form-control-lg <?= (!empty($data['photo_err'])) ? 'is-invalid' : ''; ?>">
         <span class="invalid-feedback"><?= $data['photo_err']; ?></span>
       </div>
-      <div class="form-group">
-        <label for="role">Role: </label>
-        <select class="selectpicker" name="role[]" multiple data-actions-box="true">
-          <option <?php if (in_array(1, $data['role'])) echo 'selected'; ?> value="1">actor</option>
-          <option <?php if (in_array(2, $data['role'])) echo 'selected'; ?> value="2">producer</option>
-        </select>
-        <span class="invalid-feedback"><?= $data['role_err']; ?></span>
+      <div class="form-row">
+        <div class="form-group col-lg-2">
+          <label for="role">Role: </label>
+          <select class="selectpicker form-control <?= (!empty($data['role_err'])) ? 'is-invalid' : ''; ?>" name="role[]" multiple data-actions-box="true">
+            <option <?= in_array(1, $data['role']) ? 'selected' : ''; ?> value="1">actor</option>
+            <option <?= in_array(2, $data['role']) ? 'selected' : ''; ?> value="2">producer</option>
+            <option <?= in_array(3, $data['role']) ? 'selected' : ''; ?> value="3">director</option>
+          </select>
+          <span class="invalid-feedback"><?= $data['role_err']; ?></span>
+        </div>
       </div>
 
       <input type="hidden" name="photo" value="<?= $data['photo']; ?>">
