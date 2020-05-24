@@ -23,7 +23,7 @@
                   <th>Born</th>
                   <th>Biography</th>
                   <th>Roles</th>
-                  <th>Show</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -48,7 +48,8 @@
                       ?>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-info btn-sm">Message</button>
+                      <a href="<?= URLROOT; ?>/persons/show/43" class="btn btn-primary"><i class="far fa-eye"></i></a>
+                      <!-- <a href="#" class="btn"><i class="far fa-eye"></a> -->
                     </td>
                   </tr>
                 <?php endforeach; ?>

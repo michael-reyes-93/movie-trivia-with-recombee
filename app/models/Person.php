@@ -74,4 +74,26 @@
       }
     }
 
+    public function getPersonById($id) {
+      $this->db->query('SELECT persons.*,
+        actors.actor_id as actorId,
+        producers.producer_id AS producerId,
+        directors.director_id AS directorId
+        FROM persons
+        LEFT JOIN actors
+        ON persons.person_id = actors.person_id
+        LEFT JOIN producers
+        ON persons.person_id = producers.person_id
+        LEFT JOIN directors
+        ON persons.person_id = directors.person_id 
+        WHERE persons.person_id = :id');
+        
+      $this->db->bind(':id', $id);
+    
+      $row = $this->db->single();
+
+      return $row;
+    }
+
+
   }

@@ -23,6 +23,18 @@
 
     }
 
+    public function show($id, $page = 0) {
+      $person = $this->personModel->getPersonById($id); 
+
+      $data = [
+        'person' => $person
+      ];
+      
+      echo 'page number: ' . $page . '<br>';
+      print_r($data);
+      $this->view('persons/show', $data);
+    }
+
     public function add() {
       
       if ($_SERVER['REQUEST_METHOD'] == 'POST') {
