@@ -7,17 +7,29 @@
     }
 
     public function addSinger($data) {
-      $this->db->query('INSERT INTO soundtracks (name, singer, duration, movie_id) VALUES (:name, :singer, :duration, :movie);');
+      $this->db->query('INSERT INTO soundtracks (name, singer_name, duration) VALUES (:name, :singer, :duration);');
 
       // Bind Values
       $this->db->bind(':name', $data['name']);
       $this->db->bind(':singer', $data['name_singer_group']);
       $this->db->bind(':duration', $data['duration']);
-      $this->db->bind(':movie_id', $data['movie']);
 
       // Execute
       if ($this->db->execute()) {
-        return true;
+        $soundtrack_id = $this->db->lastInsertedId();
+        $results = [];
+
+        foreach ($data['movies'] as $movie) {
+          $this->db->query('INSERT INTO movies_soundtracks (movie_id, soundtrack_id) VALUES (:movie_id, :soundtrack_id)');
+
+          // Bind Values
+          $this->db->bind(':movie_id', $movie);
+          $this->db->bind(':soundtrack_id', $soundtrack_id);
+
+          $this->db->execute() ? array_push($results, true) : array_push($results, false);
+        }        
+
+        return in_array(false, $results) ? false : true;
       } else {
         return false;
       }
