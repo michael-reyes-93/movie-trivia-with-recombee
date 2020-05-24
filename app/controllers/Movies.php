@@ -24,6 +24,10 @@
     }
 
     public function add() {
+
+      $directorList = $this->movieModel->getDirectors(); 
+      $actorList = $this->movieModel->getActors();
+      $producerList = $this->movieModel->getProducers();
       
       if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Sanitize POST array
@@ -32,16 +36,21 @@
         $data = [
           'title' => trim($_POST['title']),
           'story' => trim($_POST['story']),
-          'poster' => !empty($_FILES['photo']['name']) ? $_FILES['photo']['name'] : $data['poster'] ,
+          'poster' => $_POST['poster'],
           'release_date' => $_POST['release_date'],
           'budget' => (float)$_POST['budget'],
           'return_of_investment' => (float)$_POST['return_of_investment'],
-          'director' => (int)$_POST['director'],
+          'director' => !empty($_POST['director']) ? (int)$_POST['director'] : '',
+          'cast' => !empty($_POST['cast']) ? $_POST['cast'] : [],
+          'producers' => !empty($_POST['producers']) ? $_POST['producers'] : [],
           'music_director' => $_POST['music_director'],
           'rating' => (float)$_POST['rating'],
           'original_language' => (int)$_POST['original_language'],
           'country' => (int)$_POST['country'],
           'streaming_on' => $_POST['streaming_on'],
+          'director_list' => $directorList,
+          'actor_list' => $actorList,
+          'producer_list' => $producerList,
           // 'user_id' => $_SESSION['user_id'],
           'title_err' => '',
           'story_err' => '',
@@ -50,6 +59,7 @@
           'budget_err' => '',
           'return_of_investment_err' => '',
           'director_err' => '',
+          'cast_err' => '',
           'music_director_err' => '',
           'rating_err' => '',
           'original_language_err' => '',
@@ -126,7 +136,7 @@
             empty($data['country_err']) &&
             empty($data['streaming_on_err']))
         {
-          $folder = 'img/';
+          $folder = 'img/posters/';
           $uploaded_file = $folder . $_FILES['photo']['name'];
           move_uploaded_file($_FILES['photo']['tmp_name'], $uploaded_file);
           // Validated
@@ -135,6 +145,9 @@
             redirect('movies');
           }
         } else {
+          echo '<pre>';
+          print_r($data);
+          echo '</pre>';
           // Load view with errors
           $this->view('movies/add', $data);
         }
@@ -143,12 +156,14 @@
 
         $data = [
           'title' => '',
-          'body' => '',
+          'story' => '',
           'poster' => '',
           'release_date' => '',
           'budget' => '',
           'return_of_investment' => '',
-          'director' => '',
+          'director_list' => $directorList,
+          'actor_list' => $actorList,
+          'producer_list' => $producerList,
           'music_director' => '',
           'rating' => '',
           'original_language' => '',

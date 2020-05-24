@@ -7,6 +7,7 @@
       // }
 
       $this->soundtrackModel = $this->model('Soundtrack');
+      $this->moviesModel = $this->model('Movie');
       // $this->userModel = $this->model('User');
     }
 
@@ -25,8 +26,10 @@
     }
 
     public function add() {
+      $movieList = $this->moviesModel->getMovies();
       
       if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
         // Sanitize POST array
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
@@ -35,7 +38,8 @@
           'selection_singer_group' => (int)$_POST['selection_singer_group'] > 2 ? 0 : (int)$_POST['selection_singer_group'],
           'name_singer_group' => trim($_POST['name_singer_group']),
           'duration' => $_POST['duration'],
-          'movie' => (int)$_POST['movie'],
+          'movies' => empty($_POST['movies']) ? [] : $_POST['movies'],
+          'movie_list' => $movieList,
           'name_err' => '',
           'selection_singer_group_err' => '',
           'name_singer_group_err' => '',
@@ -63,7 +67,7 @@
         if (empty($data['duration'])) {
           $data['duration_err'] = 'Please enter a duration for the song';
         }  
-        if (empty($data['movie'])) {
+        if (empty($data['movies'])) {
           $data['movie_err'] = 'Please enter an id for the movie';
         }  
 
@@ -88,6 +92,10 @@
           }
           
         } else {
+          echo '<pre>';
+          print_r($data);
+          echo '</pre>';
+
           // Load view with errors
           $this->view('soundtracks/add', $data);
         }
@@ -101,7 +109,8 @@
           'selection_singer_group' => 0,
           'name_singer_group' => '',
           'duration' => '',
-          'movie' => ''
+          'movie' => '',
+          'movie_list' => $movieList
           //'movie_titles' => $movie_titles
         ];
 

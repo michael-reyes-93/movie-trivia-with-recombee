@@ -23,13 +23,13 @@
       <div class="form-group">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <select class="custom-select <?= (!empty($data['selection_singer_group_err'])) ? 'is-invalid' : ''; ?>" name="selection_singer_group">
+            <select class="selectpicker <?= (!empty($data['selection_singer_group_err'])) ? 'is-invalid' : ''; ?>" name="selection_singer_group">
               <option selected>Choose...</option>
               <option <?php if ($data['selection_singer_group'] == 1 ) echo 'selected'; ?> value="1">Singer</option>
               <option <?php if ($data['selection_singer_group'] == 2 ) echo 'selected'; ?> value="2">Group</option>
             </select>
           </div>
-          <input type="text" class="form-control <?= (!empty($data['selection_singer_group_err']) || !empty($data['name_singer_group_err']))  ? 'is-invalid' : ''; ?>"  value="<?= $data['name_singer_group']; ?>" placeholder="Name of the group or singer" name="name_singer_group">
+          <input type="text" class="form-control ml-2 <?= (!empty($data['selection_singer_group_err']) || !empty($data['name_singer_group_err']))  ? 'is-invalid' : ''; ?>"  value="<?= $data['name_singer_group']; ?>" placeholder="Name of the group or singer" name="name_singer_group">
           <span class="invalid-feedback"><?= $data['selection_singer_group_err']; ?></span>
           <span class="invalid-feedback"><?= $data['name_singer_group_err']; ?></span>
         </div>
@@ -39,10 +39,20 @@
         <input type="text" name="duration" class="form-control form-control-lg <?= (!empty($data['duration_err'])) ? 'is-invalid' : ''; ?>" value="<?= $data['duration']; ?>">
         <span class="invalid-feedback"><?= $data['duration_err']; ?></span>
       </div>
-      <div class="form-group">
-        <label for="movie"> Movie: <sup>*</sup></label>
-        <input type="text" name="movie" class="form-control form-control-lg <?= (!empty($data['movie_err'])) ? 'is-invalid' : ''; ?>" value="<?= $data['movie']; ?>">
-        <span class="invalid-feedback"><?= $data['movie_err']; ?></span>
+      <div class="form-row">
+        <div class="form-group col-lg-2">
+          <label for="movies">Movies: </label>
+          <select class="selectpicker form-control <?= (!empty($data['movie_err'])) ? 'is-invalid' : ''; ?>" name="movies[]" multiple data-actions-box="true" data-live-search="true">
+            <?php foreach($data['movie_list'] as $movie): ?>
+              <?php if (!empty($data['movies'])): ?>
+                <option <?= in_array($movie->movie_id, $data['movies']) ? 'selected' : ''; ?> value="<?= $movie->movie_id ?>"><?= $movie->title ?></option>
+              <?php else: ?>
+                <option value="<?= $movie->movie_id ?>"><?= $movie->title ?></option>
+              <?php endif ?>
+            <?php endforeach ?>
+          </select>
+          <span class="invalid-feedback"><?= $data['movie_err']; ?></span>
+        </div>
       </div>
 
       <!-- <input type="hidden" name="photo" value="<?= $data['photo']; ?>"> -->

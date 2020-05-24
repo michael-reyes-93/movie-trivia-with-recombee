@@ -27,7 +27,30 @@
       // Execute
       //return $this->db->test();
       if ($this->db->execute()) {
-        return true;
+        $movie_id = $this->db->lastInsertedId();
+        $results = [];
+
+        foreach ($data['cast'] as $actor) {
+          $this->db->query('INSERT INTO cast (movie_id, actor_id) VALUES (:movie_id, :actor_id)');
+
+          // Bind Values
+          $this->db->bind(':movie_id', $movie_id);
+          $this->db->bind(':actor_id', $actor);
+
+          $this->db->execute() ? array_push($results, true) : array_push($results, false);
+        }        
+
+        foreach ($data['producers'] as $producer) {
+          $this->db->query('INSERT INTO producers (movie_id, producer_id) VALUES (:movie_id, :producer_id)');
+
+          // Bind Values
+          $this->db->bind(':movie_id', $movie_id);
+          $this->db->bind(':producer_id', $producer);
+
+          $this->db->execute() ? array_push($results, true) : array_push($results, false);
+        }   
+
+        return in_array(false, $results) ? false : true;
       } else {
         return false;
       }
@@ -40,4 +63,31 @@
       return $results;
     }
 
+    public function getDirectors() {
+      $this->db->query('SELECT person_id, persons.name FROM persons WHERE is_director = 1');
+      $directors = $this->db->resultSet();
+
+      return $directors;
+    }
+
+    public function getActors() {
+      $this->db->query('SELECT person_id, persons.name FROM persons WHERE is_actor = 1');
+      $actors = $this->db->resultSet();
+
+      return $actors;
+    }
+
+    public function getProducers() {
+      $this->db->query('SELECT person_id, persons.name FROM persons WHERE is_producer = 1');
+      $producers = $this->db->resultSet();
+
+      return $producers;
+    }
+
+    public function getMovies() {
+      $this->db->query('SELECT movie_id, title FROM movies');
+      $movies = $this->db->resultSet();
+
+      return $movies;
+    }
   }

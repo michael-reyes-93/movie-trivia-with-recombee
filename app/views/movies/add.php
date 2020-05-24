@@ -17,8 +17,8 @@
         <span class="invalid-feedback"><?= $data['story_err']; ?></span>
       </div>
       <div class="form-group">
-        <label for="photo"> Poster Image: <?= (!empty($data['photo_err'])) ? '<sup>*</sup>' : '<b>'.$data['poster'].'</b>'; ?></label>
-        <input type="file" name="photo" id="photo" class="form-control form-control-lg <?= (!empty($data['photo_err'])) ? 'is-invalid' : ''; ?>">
+        <label for="uploaded_poster">Poster Image: <?= (!empty($data['photo_err'])) ? '<sup>*</sup>' : '<b>'.$data['poster'].'</b>'; ?></label>
+        <input type="file" name="uploaded_poster" id="uploaded_poster" class="form-control-file form-control-lg <?= (!empty($data['photo_err'])) ? 'is-invalid' : ''; ?>">
         <span class="invalid-feedback"><?= $data['photo_err']; ?></span>
       </div>
       <div class="form-group">
@@ -39,11 +39,50 @@
         value="<?= $data['return_of_investment']; ?>">
         <span class="invalid-feedback"><?= $data['return_of_investment_err']; ?></span>
       </div>
-      <div class="form-group">
-        <label for="director"> Director id: <sup>*</sup></label>
-        <input type="text" name="director" class="form-control form-control-lg <?= (!empty($data['director_err'])) ? 'is-invalid' : ''; ?>" 
-        value="<?= $data['director']; ?>">
-        <span class="invalid-feedback"><?= $data['director_err']; ?></span>
+      <div class="form-row">
+        <div class="form-group col-lg-2">
+          <label for="director">Director: </label>
+          <select class="selectpicker form-control <?= (!empty($data['director_err'])) ? 'is-invalid' : ''; ?>" name="director" data-live-search="true">
+            <?php foreach($data['director_list'] as $director): ?>
+              <?php if (!empty($data['director'])): ?>
+                <option <?= $data['director'] == $director->person_id ? 'selected' : ''; ?> value="<?= $director->person_id ?>"><?= $director->name ?></option>
+              <?php else: ?>
+                <option value="<?= $director->person_id ?>"><?= $director->name ?></option>
+              <?php endif; ?>
+            <?php endforeach ?>
+          </select>
+          <span class="invalid-feedback"><?= $data['director_err']; ?></span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-lg-2">
+          <label for="cast">Cast: </label>
+          <select class="selectpicker form-control <?= (!empty($data['cast_err'])) ? 'is-invalid' : ''; ?>" name="cast[]" multiple data-actions-box="true" data-live-search="true">
+            <?php foreach($data['actor_list'] as $actor): ?>
+              <?php if (!empty($data['cast'])): ?>
+                <option <?= in_array($actor->person_id, $data['cast']) ? 'selected' : ''; ?> value="<?= $actor->person_id ?>"><?= $actor->name ?></option>
+              <?php else: ?>
+                <option value="<?= $actor->person_id ?>"><?= $actor->name ?></option>
+              <?php endif ?>
+            <?php endforeach ?>
+          </select>
+          <span class="invalid-feedback"><?= $data['cast_err']; ?></span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-lg-2">
+          <label for="producers">Producers: </label>
+          <select class="selectpicker form-control <?= (!empty($data['producers_err'])) ? 'is-invalid' : ''; ?>" name="producers[]" multiple data-actions-box="true" data-live-search="true">
+            <?php foreach($data['producer_list'] as $producer): ?>
+              <?php if (!empty($data['producers'])): ?>
+                <option <?= in_array($producer->person_id, $data['producers']) ? 'selected' : ''; ?> value="<?= $producer->person_id ?>"><?= $producer->name ?></option>
+              <?php else: ?>
+                <option value="<?= $producer->person_id ?>"><?= $producer->name ?></option>
+              <?php endif ?>
+            <?php endforeach ?>
+          </select>
+          <span class="invalid-feedback"><?= $data['producers_err']; ?></span>
+        </div>
       </div>
       <div class="form-group">
         <label for="music_director"> Music Director Name: <sup>*</sup></label>
@@ -75,6 +114,8 @@
         value="<?= $data['streaming_on']; ?>">
         <span class="invalid-feedback"><?= $data['streaming_on_err']; ?></span>
       </div>
+
+      <input type="hidden" name="poster" value="<?= $data['poster']; ?>">
 
       <input type="submit" value="Submit" class="btn btn-success">
     </form>
