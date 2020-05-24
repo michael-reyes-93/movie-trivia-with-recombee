@@ -1,5 +1,5 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
-  <?= flash('post_message') ?>
+  <?= flash('person_message') ?>
   <div class="row mb-3">
     <div class="col-md-6">
       <h1>Persons</h1>
@@ -35,20 +35,21 @@
                     <td>
                       <?php 
                         $roles = [];
-                        if (!empty($person->actorId)) {
+                        if ($person->is_actor != 0) {
                           array_push($roles, "actor");
                         }
-                        if (!empty($person->producerId)) {
+                        if ($person->is_producer != 0) {
                           array_push($roles, "producer");
                         }
-                        if (!empty($person->directorId)) {
+                        if ($person->is_director) {
                           array_push($roles, "director");
                         }
                         echo join(" / ", $roles);
                       ?>
                     </td>
                     <td>
-                      <a href="<?= URLROOT; ?>/persons/show/43" class="btn btn-primary"><i class="far fa-eye"></i></a>
+                      <a href="<?= URLROOT; ?>/persons/edit/<?= $person->person_id ?>" class="btn btn-primary"><i class="far fa-edit"></i></a>
+                      <a href="<?= URLROOT; ?>/persons/show/<?= $person->person_id ?>" class="btn btn-primary"><i class="far fa-eye"></i></a>
                       <!-- <a href="#" class="btn"><i class="far fa-eye"></a> -->
                     </td>
                   </tr>
