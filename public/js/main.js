@@ -4,6 +4,32 @@ $(document).ready(function() {
     $('select').selectpicker();
   });
 
+  $("#countries").on("change", function() {
+    // var selectedOption = $(this).val();
+    // if (selectedOption == '0') {
+    //   console.log("show");
+    //   $('#sign-out').modal('show');
+    // }
+    // else {
+    //   $('#sign-out').modal('hide');
+    // }
+  });
+
+  $("#logout").click(function(){
+    // $("#countries option:selected").each(function () {
+    //   if ( $(this).val() == '0') {}
+    //   $(this).removeAttr('selected'); 
+    // });
+  });
+
+  $(".toggle-country" ).on( "click", function() {
+    $("#country" ).fadeToggle("slow", "linear");
+  });
+
+  $(".toggle-category" ).on( "click", function() {
+    $("#category" ).fadeToggle("slow", "linear");
+  });
+
   // load options for select
   console.log($('#awards').find("option").length);
   if ($('#awards').find("option").length < 1) {  //Check condition here

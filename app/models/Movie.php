@@ -50,6 +50,16 @@
           $this->db->execute() ? array_push($results, true) : array_push($results, false);
         }   
 
+        foreach ($data['soundtracks'] as $soundtrack) {
+          $this->db->query('INSERT INTO movies_soundtracks (movie_id, soundtrack_id) VALUES (:movie_id, :soundtrack_id)');
+
+          // Bind Values
+          $this->db->bind(':movie_id', $movie_id);
+          $this->db->bind(':soundtrack_id', $soundtrack);
+
+          $this->db->execute() ? array_push($results, true) : array_push($results, false);
+        }
+
         return in_array(false, $results) ? false : true;
       } else {
         return false;

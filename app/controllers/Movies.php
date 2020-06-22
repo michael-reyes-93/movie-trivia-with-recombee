@@ -7,6 +7,9 @@
       // }
 
       $this->movieModel = $this->model('Movie');
+      $this->soundtrackModel = $this->model('Soundtrack');
+      $this->countryModel = $this->model('Country');
+      $this->categoryModel = $this->model('Category');
       // $this->userModel = $this->model('User');
     }
 
@@ -28,6 +31,9 @@
       $directorList = $this->movieModel->getDirectors(); 
       $actorList = $this->movieModel->getActors();
       $producerList = $this->movieModel->getProducers();
+      $soundtrackList = $this->soundtrackModel->getSoundtracks();
+      $countryList = $this->countryModel->getCountries();
+      $categoryList = $this->categoryModel->getCategories();
       
       if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Sanitize POST array
@@ -43,6 +49,8 @@
           'director' => !empty($_POST['director']) ? (int)$_POST['director'] : '',
           'cast' => !empty($_POST['cast']) ? $_POST['cast'] : [],
           'producers' => !empty($_POST['producers']) ? $_POST['producers'] : [],
+          'soundtracks' => !empty($_POST['soundtracks']) ? $_POST['soundtracks'] : [],
+          'countries' => !empty($_POST['countries']) ? $_POST['countries'] : [],
           'music_director' => $_POST['music_director'],
           'rating' => (float)$_POST['rating'],
           'original_language' => (int)$_POST['original_language'],
@@ -51,6 +59,9 @@
           'director_list' => $directorList,
           'actor_list' => $actorList,
           'producer_list' => $producerList,
+          'soundtrack_list' => $soundtrackList,
+          'country_list' => $countryList,
+          'category_list' => $categoryList,
           // 'user_id' => $_SESSION['user_id'],
           'title_err' => '',
           'story_err' => '',
@@ -60,6 +71,7 @@
           'return_of_investment_err' => '',
           'director_err' => '',
           'cast_err' => '',
+          'soundtracks_err' => '',
           'music_director_err' => '',
           'rating_err' => '',
           'original_language_err' => '',
@@ -164,6 +176,9 @@
           'director_list' => $directorList,
           'actor_list' => $actorList,
           'producer_list' => $producerList,
+          'soundtrack_list' => $soundtrackList,
+          'country_list' => $countryList,
+          'category_list' => $categoryList,
           'music_director' => '',
           'rating' => '',
           'original_language' => '',
@@ -171,8 +186,19 @@
           'streaming_on' => '',
         ];
 
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+
         $this->view('movies/add', $data);
       }
     }
+
+    private function modal($test) {
+      
+      return "<script>alert(" . $test . "); </script>";
+    }
+
+
 
   }

@@ -1,6 +1,7 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
   <a href="<?= URLROOT; ?>/movies" class="btn btn-light"><i class="fa fa-backward"></i> Back</a>
+  
   <div class="card card-body bg-light mt-5">
     <h2>Add Post</h2>
     <p>Create a post with this form</p>
@@ -39,10 +40,11 @@
         value="<?= $data['return_of_investment']; ?>">
         <span class="invalid-feedback"><?= $data['return_of_investment_err']; ?></span>
       </div>
-      <div class="form-row">
-        <div class="form-group col-lg-2">
+      <!-- check this later -->
+      <!-- <div class="form-row"> -->
+        <div class="form-group">
           <label for="director">Director: </label>
-          <select class="selectpicker form-control <?= (!empty($data['director_err'])) ? 'is-invalid' : ''; ?>" name="director" data-live-search="true">
+          <select class="col-lg-2 selectpicker form-control <?= (!empty($data['director_err'])) ? 'is-invalid' : ''; ?>" name="director" data-live-search="true">
             <?php foreach($data['director_list'] as $director): ?>
               <?php if (!empty($data['director'])): ?>
                 <option <?= $data['director'] == $director->person_id ? 'selected' : ''; ?> value="<?= $director->person_id ?>"><?= $director->name ?></option>
@@ -53,7 +55,7 @@
           </select>
           <span class="invalid-feedback"><?= $data['director_err']; ?></span>
         </div>
-      </div>
+      <!-- </div> -->
       <div class="form-row">
         <div class="form-group col-lg-2">
           <label for="cast">Cast: </label>
@@ -90,11 +92,56 @@
         value="<?= $data['music_director']; ?>">
         <span class="invalid-feedback"><?= $data['music_director_err']; ?></span>
       </div>
+      <div class="form-row">
+        <div class="col-md-4 mb-3">
+          <label for="soundtracks">Soundtracks: </label>
+          <select class="selectpicker form-control <?= (!empty($data['soundtracks_err'])) ? 'is-invalid' : ''; ?>" name="soundtracks[]" multiple data-actions-box="true" data-live-search="true">
+            <?php foreach($data['soundtrack_list'] as $soundtrack): ?>
+              <?php if (!empty($data['soundtracks'])): ?>
+                <option <?= in_array($soundtrack->soundtrack_id, $data['soundtracks']) ? 'selected' : ''; ?> value="<?= $soundtrack->soundtrack_id ?>"><?= $soundtrack->name ?></option>
+              <?php else: ?>
+                <option value="<?= $soundtrack->soundtrack_id ?>"><?= $soundtrack->name ?></option>
+              <?php endif ?>
+            <?php endforeach ?>
+          </select>
+          <span class="invalid-feedback"><?= $data['soundtracks_err']; ?></span>
+        </div>
+      </div>
       <div class="form-group">
         <label for="rating"> Rating: <sup>*</sup></label>
         <input type="text" name="rating" class="form-control form-control-lg <?= (!empty($data['rating_err'])) ? 'is-invalid' : ''; ?>" 
         value="<?= $data['rating']; ?>">
         <span class="invalid-feedback"><?= $data['rating_err']; ?></span>
+      </div>
+      <div class="form-row">
+        <div class="col-2 mb-3">
+          <label for="categories">category: </label>
+          <select class="selectpicker form-control <?= (!empty($data['categories_err'])) ? 'is-invalid' : ''; ?>" name="categories[]" multiple data-actions-box="true" data-live-search="true">
+            <?php foreach($data['category_list'] as $category): ?>
+              <?php if (!empty($data['categories'])): ?>
+                <option <?= inarray($category->id, $data['categories']) ? 'selected' : ''; ?> value="<?= $category->id ?>"><?= $category->name ?></option>
+              <?php else: ?>
+                <option value="<?= $category->id ?>"><?= $category->name ?></option>
+              <?php endif ?>
+            <?php endforeach ?>
+          </select>
+          <span class="invalid-feedback"><?= $data['categories_err']; ?></span>
+        </div>
+        <div class="col-ml-2 mb-4 align-self-end">
+          <b class="align-baseline mr-3">If category is not listed, you can add it</b>
+          <a class="align-baseline toggle-category">
+          <!--  data-toggle="modal" data-target="#sign-out" -->
+            <i class="fas fa-sign-out-alt text-danger fa-lg"></i>
+          </a>
+        </div>
+      </div>
+      <div class="form-group" id="category" style="display:none;">
+        <label for="category"> category: <sup>*</sup></label>
+        <input type="text" name="category" class="form-control form-control-lg" id="category-name">
+        <span class="invalid-feedback"></span>
+        <div class="mt-3">
+          <button type="button" onclick="myFunction2('<?= URLROOT; ?>/categories/test')" class="btn btn-success" id="category_add">Add Category</button>
+        </div>
       </div>
       <div class="form-group">
         <label for="original_language"> original language: <sup>*</sup></label>
@@ -102,11 +149,35 @@
         value="<?= $data['original_language']; ?>">
         <span class="invalid-feedback"><?= $data['original_language_err']; ?></span>
       </div>
-      <div class="form-group">
+      <div class="form-row">
+        <div class="col-2 mb-3">
+          <label for="countries">Countries: </label>
+          <select class="selectpicker form-control <?= (!empty($data['countries_err'])) ? 'is-invalid' : ''; ?>" name="countries[]" multiple data-actions-box="true" data-live-search="true">
+            <?php foreach($data['country_list'] as $country): ?>
+              <?php if (!empty($data['countries'])): ?>
+                <option <?= inarray($country->id, $data['countries']) ? 'selected' : ''; ?> value="<?= $country->id ?>"><?= $country->country ?></option>
+              <?php else: ?>
+                <option value="<?= $country->id ?>"><?= $country->country ?></option>
+              <?php endif ?>
+            <?php endforeach ?>
+          </select>
+          <span class="invalid-feedback"><?= $data['countries_err']; ?></span>
+        </div>
+        <div class="col-ml-2 mb-4 align-self-end">
+          <b class="align-baseline mr-3">If country is not listed, you can add it</b>
+          <a class="align-baseline toggle-country">
+          <!--  data-toggle="modal" data-target="#sign-out" -->
+            <i class="fas fa-sign-out-alt text-danger fa-lg"></i>
+          </a>
+        </div>
+      </div>
+      <div class="form-group" id="country" style="display:none;">
         <label for="country"> Country: <sup>*</sup></label>
-        <input type="text" name="country" class="form-control form-control-lg <?= (!empty($data['country_err'])) ? 'is-invalid' : ''; ?>" 
-        value="<?= $data['country']; ?>">
-        <span class="invalid-feedback"><?= $data['country_err']; ?></span>
+        <input type="text" name="country" class="form-control form-control-lg" id="country-name">
+        <span class="invalid-feedback"></span>
+        <div class="mt-3">
+          <button type="button" onclick="myFunction2('<?= URLROOT; ?>/countries/test')" class="btn btn-success" id="country_add">Add Country</button>
+        </div>
       </div>
       <div class="form-group">
         <label for="streaming_on"> Streaming On: <sup>*</sup></label>
@@ -114,11 +185,32 @@
         value="<?= $data['streaming_on']; ?>">
         <span class="invalid-feedback"><?= $data['streaming_on_err']; ?></span>
       </div>
+      <div class="form-group">
+        <label for="awards" style="color: red; font-weight: bold;"> Awards: <sup>*</sup></label>
+        <!-- <input type="text" name="streaming_on" class="form-control form-control-lg <?= (!empty($data['streaming_on_err'])) ? 'is-invalid' : ''; ?>" 
+        value="<?= $data['streaming_on']; ?>">
+        <span class="invalid-feedback"><?= $data['streaming_on_err']; ?></span> -->
+      </div>
+      <div class="form-group">
+        <label for="dubbed_languages" style="color: red; font-weight: bold;"> Dubbed Languages: <sup>*</sup></label>
+        <!-- <input type="text" name="streaming_on" class="form-control form-control-lg <?= (!empty($data['streaming_on_err'])) ? 'is-invalid' : ''; ?>" 
+        value="<?= $data['streaming_on']; ?>">
+        <span class="invalid-feedback"><?= $data['streaming_on_err']; ?></span> -->
+      </div>
+      <div class="form-group">
+        <label for="subtitles" style="color: red; font-weight: bold;"> Subtitles: <sup>*</sup></label>
+        <!-- <input type="text" name="streaming_on" class="form-control form-control-lg <?= (!empty($data['streaming_on_err'])) ? 'is-invalid' : ''; ?>" 
+        value="<?= $data['streaming_on']; ?>">
+        <span class="invalid-feedback"><?= $data['streaming_on_err']; ?></span> -->
+      </div>
 
       <input type="hidden" name="poster" value="<?= $data['poster']; ?>">
 
       <input type="submit" value="Submit" class="btn btn-success">
     </form>
   </div>
+
+
+<?php require APPROOT . '/views/modals/modal.php'; ?>
 
 <?php require APPROOT . '/views/inc/footer.php'; ?>
