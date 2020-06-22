@@ -33,3 +33,11 @@
       return false;
     }
   }
+
+  function hasAccess() {
+    if($_SESSION['user_role'] == 'admin') {
+      return true;
+    } else {
+      return false;
+    }
+  }
