@@ -63,5 +63,12 @@
         return false;
       }
     }
+
+    public function getSoundtracks() {
+      $this->db->query('SELECT soundtrack_id, name FROM soundtracks');
+      $soundtracks = $this->db->resultSet();
+
+      return $soundtracks;
+    }
     
   }

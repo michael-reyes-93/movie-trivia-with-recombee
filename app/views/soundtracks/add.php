@@ -1,19 +1,10 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
 
-  <a href="<?= URLROOT; ?>/movies" class="btn btn-light"><i class="fa fa-backward"></i> Back</a>
+  <a href="<?= URLROOT; ?>/soundtracks" class="btn btn-light"><i class="fa fa-backward"></i> Back</a>
   <div class="card card-body bg-light mt-5">
     <h2>Add Soundtrack</h2>
     <p>Create an soundtrack with this form</p>
     <form action="<?= URLROOT; ?>/soundtracks/add" method="post" enctype="multipart/form-data">
-      <!-- <div class="form-group">
-        <select id="cars">
-          <?php foreach($data['movie_titles'] as $movie_title): ?> 
-            <option value="<?= $movie_title->movie_id ?>"><?= $movie_title->title ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div> -->
-
-      <!--  -->
 
       <div class="form-group">
         <label for="name"> Name: <sup>*</sup></label>
@@ -38,21 +29,6 @@
         <label for="duration"> Duration: <sup>*</sup></label>
         <input type="text" name="duration" class="form-control form-control-lg <?= (!empty($data['duration_err'])) ? 'is-invalid' : ''; ?>" value="<?= $data['duration']; ?>">
         <span class="invalid-feedback"><?= $data['duration_err']; ?></span>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-lg-2">
-          <label for="movies">Movies: </label>
-          <select class="selectpicker form-control <?= (!empty($data['movie_err'])) ? 'is-invalid' : ''; ?>" name="movies[]" multiple data-actions-box="true" data-live-search="true">
-            <?php foreach($data['movie_list'] as $movie): ?>
-              <?php if (!empty($data['movies'])): ?>
-                <option <?= in_array($movie->movie_id, $data['movies']) ? 'selected' : ''; ?> value="<?= $movie->movie_id ?>"><?= $movie->title ?></option>
-              <?php else: ?>
-                <option value="<?= $movie->movie_id ?>"><?= $movie->title ?></option>
-              <?php endif ?>
-            <?php endforeach ?>
-          </select>
-          <span class="invalid-feedback"><?= $data['movie_err']; ?></span>
-        </div>
       </div>
 
       <!-- <input type="hidden" name="photo" value="<?= $data['photo']; ?>"> -->
