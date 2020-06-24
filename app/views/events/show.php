@@ -1,4 +1,6 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
+
+<a href="<?= URLROOT; ?>/events" class="btn btn-light"><i class="fa fa-backward"></i> Back</a>
 <div class="container-fluid">
   <!-- title -->
   <div class="row">
@@ -20,7 +22,7 @@
       <?php foreach($data['awards'] as $award): ?>
         <div class="card mb-5">
           <div class="card-header">
-            <b><?= $award ?></b>
+            <b><?= $award->name ?></b>
           </div>
           <div class="card-body">
             <blockquote class="blockquote mb-0">

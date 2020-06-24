@@ -4,7 +4,7 @@
   <div class="card card-body bg-light mt-5">
     <h2 id="test-div2">Add Event</h2>
     <p>Create an person with this form</p>
-    <form action="<?= URLROOT; ?>/events/add" method="post" enctype="multipart/form-data">
+    <form action="<?= URLROOT; ?>/events/edit/<?= $data['id']; ?>" method="post" enctype="multipart/form-data">
       <!-- <div class="form-group">
         <select>
           <?php foreach($data['movie_titles'] as $movie_title): ?> 
@@ -27,33 +27,31 @@
         value="<?= $data['year']; ?>" placeholder="testing">
         <span class="invalid-feedback"><?= $data['year_err']; ?></span>
       </div>
-      <div class="form-group">
-        <label for="awards2"> Awards Given: <sup>*</sup></label>
-        <textarea name="awards2" rows=4 class="form-control form-control-lg <?= (!empty($data['awards_err'])) ? 'is-invalid' : ''; ?>" placeholder="award 1, award 2 and award 3"><?= $data['awards2']; ?></textarea>
-        <span class="invalid-feedback"><?= $data['awards_err']; ?></span>
-      </div>
       
-      <!-- <div class="form-row align-items-center">
-        <div class="form-group col-lg-10">
-          <label for="award_name_list"> Award 1: <sup>*</sup></label>
-          <input type="text" name="award_name_list[]" class="form-control form-control-lg <?= (!empty($data['award_name_err'])) ? 'is-invalid' : ''; ?>" value="<?= $award['name'] ?>" placeholder="testing">
-              <span class="invalid-feedback"><?= $data['award_name_err']; ?></span>
+      <button type="button" id="add-awards" class="btn btn-success mb-3">Add Award Input</button>
+
+      <?php if(!empty($data['awards'][0]->name)): ?>
+        <?php for ($i=0; $i < count($data['awards']); $i++): ?>
+          <div class="form-row align-items-center">
+            <div class="form-group col-lg-10">
+              <label for="award_name_list"> Award <?= $i + 1 ?>: <sup>*</sup></label>
+              <input type="text" name="award_name_list[]" class="form-control form-control-lg <?= (!empty($award['award_name_err'])) ? 'is-invalid' : ''; ?>" value="<?= $data['awards'][$i]->name ?>" placeholder="testing">
+              <span class="invalid-feedback"><?= $award['award_name_err']; ?></span>
             </div>
             <div class="form-group col-lg-2">
               <label for="category_list"> category of award: <sup>*</sup></label>
-              <select class="selectpicker form-control <?= (!empty($data['participated_as_err'])) ? 'is-invalid' : ''; ?>" name="category_list[]">
-                <option <?= $award['participated_as'] == 'x' ? 'selected' : '' ?> value="x">Select</option>
-                <option <?= $award['participated_as'] == 'm' ? 'selected' : '' ?> value="m">Movies</option>
-                <option <?= $award['participated_as'] == 'a' ? 'selected' : '' ?> value="a">Actor</option>
-                <option <?= $award['participated_as'] == 'd' ? 'selected' : '' ?> value="d">Director</option>
-                <option <?= $award['participated_as'] == 'p' ? 'selected' : '' ?> value="p">Producer</option>
+              <select class="selectpicker form-control <?= (!empty($award['category_err'])) ? 'is-invalid' : ''; ?>" name="category_list[]">
+                <option <?= $data['awards'][$i]->category == 'x' ? 'selected' : '' ?> value="x">Select</option>
+                <option <?= $data['awards'][$i]->category == 'm' ? 'selected' : '' ?> value="m">Movies</option>
+                <option <?= $data['awards'][$i]->category == 'a' ? 'selected' : '' ?> value="a">Actor</option>
+                <option <?= $data['awards'][$i]->category == 'd' ? 'selected' : '' ?> value="d">Director</option>
+                <option <?= $data['awards'][$i]->category == 'p' ? 'selected' : '' ?> value="p">Producer</option>
               </select>
-              <span class="invalid-feedback"><?= $data['participated_as_err']; ?></span>
+              <span class="invalid-feedback"><?= $award['category_err']; ?></span>
             </div>
-          </div> -->
-      <button type="button" id="add-awards" class="btn btn-success mb-3">Add Award Input</button>
-      
-      <?php if(!empty($data['awards'])): ?>
+          </div>
+        <?php endfor ?>
+      <?php else: ?>
         <?php foreach($data['awards'] as $award): ?>
           <div class="form-row align-items-center">
             <div class="form-group col-lg-10">
@@ -73,35 +71,10 @@
               <span class="invalid-feedback"><?= $award['category_err']; ?></span>
             </div>
           </div>
-          <!-- style="display:none;" -->
-          <!-- <div class="form-group" id="category" >
-            <label for="category"> category: <sup>*</sup></label>
-            <input type="text" name="category" class="form-control form-control-lg" id="category-name">
-            <span class="invalid-feedback"></span>
-            
-          </div> -->
         <?php endforeach ?>
       <?php endif ?>
 
-      <?php if(empty($data['awards'])): ?>
-        <div class="form-row align-items-center">
-          <div class="form-group col-lg-10">
-            <label for="award_name_list"> Award 1: <sup>*</sup></label>
-            <input type="text" name="award_name_list[]" class="form-control form-control-lg" placeholder="testing">
-          </div>
-          <div class="form-group col-lg-2">
-            <label for="category_list"> category of award: <sup>*</sup></label>
-            <select class="selectpicker form-control" name="category_list[]">
-              <option value="x" selected>Select</option>
-              <option value="m">Movies</option>
-              <option value="a">Actor</option>
-              <option value="d">Director</option>
-              <option value="p">Producer</option>
-            </select>
-          </div>
-        </div>
-      <?php endif ?>
-
+      
       <input type="submit" value="Submit" class="btn btn-success">
     </form>
   </div>
