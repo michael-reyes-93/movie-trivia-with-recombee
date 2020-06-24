@@ -34,22 +34,23 @@
 
       // Execute 
       if ($this->db->execute()) {
-        $event_id = $this->db->lastInsertedId();
-        $results = [];
+        return array(true, $this->db->lastInsertedId());
+      } else {
+        return false;
+      }
+    }
 
-        echo "id del evento: " . $event_id;
-        foreach ($data['awards'] as $award) {
-          $this->db->query('INSERT INTO awards (name, category, event_id) VALUES (:award_name, :award_category, :event_id)');
+    public function updateEvent($data) {
+      $this->db->query('UPDATE events SET name = :name, year = :year WHERE event_id = :id');
 
-          // Bind Values
-          $this->db->bind(':award_name', $award['name']);
-          $this->db->bind(':award_category', $award['category']);
-          $this->db->bind(':event_id', $event_id);
+      // Bind Values
+      $this->db->bind(':id', $data['id']);
+      $this->db->bind(':name', $data['name']);
+      $this->db->bind(':year', $data['year']);
 
-          $this->db->execute() ? array_push($results, true) : array_push($results, false);
-        }        
-
-        return in_array(false, $results) ? false : true;
+      // Execute 
+      if ($this->db->execute()) {
+        return array(true, $this->db->lastInsertedId());
       } else {
         return false;
       }
