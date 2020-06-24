@@ -2,9 +2,13 @@
   class Persons extends Controller {
 
     public function __construct() {
-      // if(!isLoggedIn()) {
-      //   redirect('users/login');
-      // }
+      if(!isLoggedIn()) {
+        redirect('users/login');
+      }
+
+      if(!hasAccess()) {
+        redirect('');
+      }
 
       $this->personModel = $this->model('Person');
       // $this->userModel = $this->model('User');
@@ -57,7 +61,7 @@
           $data['name_err'] = 'Please enter name';
         }
         if (empty($data['born'])) {
-          $data['born_err'] = 'Please enter brith information';
+          $data['born_err'] = 'Please enter birth information';
         }  
         if (empty($data['biography'])) {
           $data['biography_err'] = 'Please enter a biography';
