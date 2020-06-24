@@ -7,6 +7,7 @@
       // }
 
       $this->eventModel = $this->model('Event');
+      $this->awardModel = $this->model('Award');
       // $this->userModel = $this->model('User');
     }
 
@@ -24,12 +25,19 @@
 
     public function show($id, $page = 0) {
       $event = $this->eventModel->getEventById($id); 
+      $awards = $this->awardModel->getAwards($id);
 
       $data = [
         'event_id' => $id,
         'event' => $event,
-        'awards' => array_map("clean_data", preg_split("/(\w*and\w*|[,]+)/",  $event->awards ) )
+        'awards' => $awards
       ];
+
+      echo '<pre>';
+      print_r($awards);
+      echo '</pre>';
+
+      // array_map("clean_data", preg_split("/(\w*and\w*|[,]+)/",  $event->awards ) )
 
       $this->view('events/show', $data);
     }
@@ -76,13 +84,20 @@
         // Make sure no errors
         if (empty($data['name_err']) &&
             empty($data['year_err']) &&
-            $this->checkErrors($data['awards'])){
-          if ($this->eventModel->addEvent($data)) {
-            flash('event_message', 'Event Added');
-            redirect('events');
+            $this->checkErrors($data['awards']))
+        {
+          $event_response = $this->eventModel->addEvent($data);
+          $results = [];
+          if ($event_response[0]) {
+
+            $event_id = $event_response[1];
+            array_push($results, $this->awardModel->addAwards($event_id, $data['awards']));
+            if (in_array(true, $results)) {
+              flash('event_message', 'Event Added');
+              redirect('events');
+            }
           }
 
-          $this->view('events/add', $data);
         } else {
           // $data['awards_array'] = array_map("clean_data", preg_split("/(\w*and\w*|[,]+)/",  $data['awards'] ) );
 
@@ -115,116 +130,115 @@
     }
 
     public function edit($id) {
+      $awards = $this->awardModel->getAwards($id);
 
-    //   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //     // Sanitize POST array
     //     $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-    //     $data = [
-    //       'id' => $id,
-    //       'name' => trim($_POST['name']),
-    //       'born' => trim($_POST['born']),
-    //       'biography' => trim($_POST['biography']),
-    //       'photo' => $_POST['photo'],
-    //       'is_actor' => in_array(1, $_POST['role']) ? 1 : 0,
-    //       'is_producer' => in_array(2, $_POST['role']) ? 1 : 0,
-    //       'is_director' => in_array(3, $_POST['role']) ? 1 : 0,
-    //       'role' => empty($_POST['role']) ? [] : $_POST['role'],
-    //       'name_err' => '',
-    //       'born_err' => '',
-    //       'biography_err' => '',
-    //       'photo_err' => '',
-    //       'role_err' => ''
-    //     ];
+        $data = [
+          'id' => $id,
+          'name' => trim($_POST['name']),
+          'year' => trim($_POST['year']),
+          'awards' => $this->awards_category($_POST['award_name_list'], $_POST['category_list'], $awards)
+        ];
 
-    //     // Validate data
-    //     if (empty($data['name'])) {
-    //       $data['name_err'] = 'Please enter name';
-    //     }
-    //     if (empty($data['born'])) {
-    //       $data['born_err'] = 'Please enter brith information';
-    //     }  
-    //     if (empty($data['biography'])) {
-    //       $data['biography_err'] = 'Please enter a biography';
-    //     }
-    //     if (!empty($_FILES['uploaded_photo']['name'])) {
-    //       $data['photo'] = $_FILES['uploaded_photo']['name'];
-    //     }
-    //     if (empty($data['photo'])) {
-    //       $data['photo_err'] = 'Please upload a photo';
-    //     }
-    //     if (empty($data['role'])) {
-    //       $data['role_err'] = 'Please select one or various roles';
-    //     }
+        // Validate data
+        if (empty($data['name'])) {
+          $data['name_err'] = 'Please enter name';
+        }
 
-    //     // Make sure no errors
-    //     if (empty($data['name_err']) && 
-    //         empty($data['born_err']) &&
-    //         empty($data['biography_err']) &&
-    //         empty($data['photo_err']) &&
-    //         empty($data['role_err'])
-    //     ) {
-    //       $folder = 'img/';
-    //       $uploaded_file = $folder . $_FILES['uploaded_photo']['name'];
-    //       move_uploaded_file($_FILES['uploaded_photo']['tmp_name'], $uploaded_file);
+        if (empty($data['year'])) {
+          $data['year_err'] = 'Please enter year of the event';
+        }
 
-    //       print_r($data);
+        print_r($data['awards']);
+        foreach ($data['awards'] as $key => $value) {
+          // $arr[3] will be updated with each value from $arr...
 
-    //       // Validated
-    //       if ($this->personModel->updatePerson($data)) {
-    //         flash('person_message', 'Person Updated');
-    //         redirect('persons');
-    //       }
-    //     } else {
-    //       // Load view with errors
-    //       $this->view('persons/edit', $data);
-    //     }
+          if(empty($data['awards'][$key]['name'])) {
+            $data['awards'][$key]['award_name_err'] = 'invalid award name';
+          }
+          
+          if($data['awards'][$key]['category'] == 'x') {
+            $data['awards'][$key]['category_err'] = 'invalid award category';
+          }
+        }
 
-    //   } else {
-    //     $roles = [];
+        // Make sure no errors
+        if (empty($data['name_err']) &&
+            empty($data['year_err']) &&
+            $this->checkErrors($data['awards']))
+        {
+          $results = [];
+          if ($this->eventModel->updateEvent($data)) {
 
-    //     // Get existing post from model
-    //     $person = $this->personModel->getPersonById($id); 
+            array_push($results, $this->awardModel->updateAwards($id, $data['awards']));
+            if (in_array(true, $results)) {
+              flash('event_message', 'Event Updated');
+              redirect('events');
+            }
+          }
 
-    //     // Check for owner
-    //     // if ($post->user_id != $_SESSION['user_id']) {
-    //     //   redirect('posts');
-    //     // }
-    //     $file = URLROOT . '/img/' . $person->photo;
-    //     echo $file;
+        } else {
+                    
+          echo '<pre>';
+          print_r($awards);
+          print_r($data);
+          echo '</pre>';
 
-    //     $data = [
-    //       'id' => $id,
-    //       'name' => $person->name,
-    //       'born' => $person->born,
-    //       'biography' => $person->biography,
-    //       'photo' => '',
-    //       'is_actor' => $person->is_actor,
-    //       'is_producer' => $person->is_producer,
-    //       'is_director' => $person->is_director,
-    //       'role' => $roles
-    //     ];
+          // Load view with errors
+          $this->view('events/edit', $data);
+        }
 
-    //     if (!@GetImageSize($file)) {
-    //       $data['photo_err'] = 'Please upload a photo';
-    //     } else {
-    //       $data['photo'] = $person->photo;
-    //     }
+      } else {
 
-    //     print_r($person);
-    //     $this->view('persons/edit', $data);
-    //   }
+        // Get existing post from model
+        $event = $this->eventModel->getEventById($id); 
 
-      $this->view('persons/edit');
+        // Check for owner
+        // if ($post->user_id != $_SESSION['user_id']) {
+        //   redirect('posts');
+        // }
+        // $file = URLROOT . '/img/' . $person->photo;
+        // echo $file;
+
+        $data = [
+          'id' => $id,
+          'awards' => $awards,
+          'name' => $event->name,
+          'year' => $event->year
+        ];
+
+        // if (!@GetImageSize($file)) {
+        //   $data['photo_err'] = 'Please upload a photo';
+        // } else {
+        //   $data['photo'] = $person->photo;
+        // }
+
+        $this->view('events/edit', $data);
+      }
+
     }
 
-    private function awards_category($arr1, $arr2) {
+    private function awards_category($arr1, $arr2, $arr3 = []) {
       $new_arr = [];
       foreach( $arr1 as $key => $a ) {
-        array_push($new_arr, array(
-          'name' => $arr1[$key], 
-          'category' => $arr2[$key])
-        );
+        if(!empty($arr3)) {
+          //$new_arr['id'] = ;
+          array_push($new_arr, 
+            array(
+              'name' => $arr1[$key], 
+              'category' => $arr2[$key],
+              'id' => $key < count($arr1) - count($arr3) ? 'x' : $arr3[$key - (count($arr1) - count($arr3))]->award_id
+            )
+          );
+        } else {
+          array_push($new_arr, array(
+            'name' => $arr1[$key], 
+            'category' => $arr2[$key])
+          );
+        }
       }
   
       return $new_arr;
