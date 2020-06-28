@@ -16,6 +16,16 @@
       return $events;
     }
 
+    public function getAwardById($award_id) {
+      $this->db->query("SELECT * FROM awards WHERE award_id = :id");
+
+      $this->db->bind(':id', $award_id);
+
+      $award = $this->db->single();
+
+      return $award;
+    }
+
     public function addAwards($event_id, $awards) {
       $results = [];
 
