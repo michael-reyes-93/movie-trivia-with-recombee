@@ -9,6 +9,8 @@
       $this->awardModel = $this->model('Award');
       $this->personModel = $this->model('Person');
       $this->movieModel = $this->model('Movie');
+      $this->participantModel = $this->model('Participant');
+
       // $this->personModel = $this->model('Person');
       // $this->userModel = $this->model('User');
     }
@@ -238,6 +240,48 @@
     //   }
 
       $this->view('persons/edit');
+    }
+
+    public function addParticipant($id) {
+
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        print_r($_POST);
+        echo $this->participantModel->addParticipantToAward($_POST['status'], $_POST['participant_picked'], $_POST['award_id'],  $_POST['category']) . '</br>';
+        flash('participant_message', 'the participant name is incorrect', 'alert alert-danger');
+        header('Content-Type: application/json');
+        $output = json_encode(array('redirect' => URLROOT . '/events/show/' . $id));
+        echo $output;
+      } else {
+        // $data['test'] ='testing modal';
+      }
+    }
+
+    public function editParticipant($id) {
+
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        print_r($_POST);
+        echo $this->participantModel->editParticipantInAward($_POST['status'], $_POST['participant_picked'], $_POST['participant_id'],  $_POST['category']) . '</br>';
+        flash('participant_message', 'the participant name is incorrect', 'alert alert-danger');
+        header('Content-Type: application/json');
+        $output = json_encode(array('redirect' => URLROOT . '/events/show/' . $id));
+        echo $output;
+      } else {
+        // $data['test'] ='testing modal';
+      }
+    }
+
+    public function deleteParticipant($id) {
+
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        print_r($_POST);
+        echo $this->participantModel->deleteParticipantInAward($_POST['participant_id'],  $_POST['category'], $_POST['award_id']) . '</br>';
+        flash('participant_message', 'the participant name is incorrect', 'alert alert-danger');
+        header('Content-Type: application/json');
+        $output = json_encode(array('redirect' => URLROOT . '/events/show/' . $id));
+        echo $output;
+      } else {
+        // $data['test'] ='testing modal';
+      }
     }
 
     private function getListOfPaticipantsToChooseBycategory($category) {

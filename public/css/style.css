@@ -8,6 +8,64 @@ header {
   height: 100vh;
   background: linear-gradient(rgba(0, 0, 0, .4), rgba(0, 0, 0, .5)), url(images/header-img.jpeg) no-repeat center center /cover;
 }
+/* end of header */
+
+/* .icon-bullet {
+  content: "2";
+  position: absolute;
+  top: 7px;
+  left: 15px;
+  height: 12px;
+  width: 12px;
+  background-color: #f44336;
+  border-radius: 50%;
+} */
+
+.delete-card:focus {
+  outline: 0 !important;
+}
+
+.delete-card{
+  /* background-color: #fb0018; */
+  border: none;
+  color: white;
+  padding: 7px 9px;
+  text-align: center;
+  text-decoration: none;
+  /* display: inline-table; */
+  font-size: 17px;
+  margin: 0px -1px;
+  cursor: pointer;
+  position: absolute;
+  border-radius: 50%;
+  top: -15px;
+  left: 319px;
+  outline:none;
+  border: 0;
+}
+
+.edit-card:focus {
+  outline: 0 !important;
+}
+
+.edit-card{
+  /* background-color: #4682B4; */
+  border: none;
+  color: white;
+  padding: 7px 7px;
+  text-align: center;
+  text-decoration: none;
+  /* display: inline-table; */
+  font-size: 17px;
+  margin: 0px -1px;
+  cursor: pointer;
+  position: absolute;
+  border-radius: 50%;
+  top: 26px;
+  left: 319px;
+  outline:none;
+  border: 0;
+}
 
 /* navbar */
 .nav-menu {

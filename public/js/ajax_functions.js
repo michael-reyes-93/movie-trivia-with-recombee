@@ -40,6 +40,78 @@ function myFunction2(url) {
   });
 }
 
+function addParticipant(url, id, category) {
+  console.log(url);
+  console.log("category: " + category);
+  // category_name = $("#category-name").val();
+  console.log("status: " + $("#status-" + id).val());
+  console.log("particpant id: " + $("#participant-picked-" + id).val());
+  category_name = "nothing";
+  $.post(url, {status: $("#status-" + id).val(), participant_picked: $("#participant-picked-" + id).val(), award_id: id, category: category} )
+  .done(function(data, textStatus, jqXHR) {
+    console.log(data.redirect);
+    // if (!data.success && !currentClass.includes("is-invalid")) {
+    //   $("#category input").toggleClass("is-invalid");
+    //   $("#category span").text(data.msg1);
+    // } else if (data.success && currentClass.includes("is-invalid")){
+    //   $("#category input").toggleClass("is-invalid");
+    // }
+
+    // window.location.href = data.redirect;
+    
+    //is-invalid
+  }).fail(function(jqXHR, textStatus, errorThrown) 
+  {
+    console.log(jqXHR.responseText);
+    //failed
+  });
+}
+
+function editParticipant(url, participant_id, category) {
+  console.log(url);
+  console.log("category: " + category);
+  // category_name = $("#category-name").val();
+  console.log("status: " + $("#status-" + participant_id).val());
+  console.log("particpant picked: " + $("#participant-picked-" + participant_id).val());
+  category_name = "nothing";
+  $.post(url, {status: $("#status-" + participant_id).val(), participant_picked: $("#participant-picked-" + participant_id).val(), participant_id: participant_id, category: category} )
+  .done(function(data, textStatus, jqXHR) {
+    console.log(data.redirect);
+    // if (!data.success && !currentClass.includes("is-invalid")) {
+    //   $("#category input").toggleClass("is-invalid");
+    //   $("#category span").text(data.msg1);
+    // } else if (data.success && currentClass.includes("is-invalid")){
+    //   $("#category input").toggleClass("is-invalid");
+    // }
+
+    // window.location.href = data.redirect;
+    
+    //is-invalid
+  }).fail(function(jqXHR, textStatus, errorThrown) 
+  {
+    console.log(jqXHR.responseText);
+    //failed
+  });
+}
+
+function deleteParticipant(url, participant_id, category, award_id) {
+  console.log(url);
+  console.log("category: " + category);
+  console.log("award id: " + award_id);
+  console.log("participant id: " + participant_id);
+  category_name = "nothing";
+  $.post(url, {participant_id: participant_id, category: category, award_id: award_id} )
+  .done(function(data, textStatus, jqXHR) {
+    console.log(data.redirect);
+    // window.location.href = data.redirect;
+    
+  }).fail(function(jqXHR, textStatus, errorThrown) 
+  {
+    console.log(jqXHR.responseText);
+    //failed
+  });
+}
+
 function fn1() {
   alert("external fn clicked");
 }

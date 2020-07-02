@@ -70,4 +70,14 @@
 
       return in_array(false, $results) ? false : true;
     }
+
+    public function getParticipantsInAwardsByEventId($event_id) {
+      $this->db->query('SELECT a.award_id, pa.participant_id, e.name, a.name, pa.status, m.title, m.poster, p.name, p.photo FROM events AS e INNER JOIN awards AS a ON e.event_id = a.event_id LEFT JOIN award_participant_movie AS apm ON a.award_id = apm.award_id LEFT JOIN award_participant_person AS app ON a.award_id = app.award_id INNER  JOIN participants AS pa ON apm.participant_id = pa.participant_id OR app.participant_id = pa.participant_id LEFT JOIN movies AS m ON apm.movie_id = m.movie_id LEFT JOIN persons AS p ON app.person_id = p.person_id WHERE e.event_id = :event_id;');
+
+      $this->db->bind(':event_id', $event_id);
+    
+      $participants = $this->db->resultSet();
+
+      return $participants;
+    }
   }

@@ -8,6 +8,7 @@
 
       $this->eventModel = $this->model('Event');
       $this->awardModel = $this->model('Award');
+      $this->movieModel = $this->model('Movie');
       // $this->userModel = $this->model('User');
     }
 
@@ -26,15 +27,25 @@
     public function show($id, $page = 0) {
       $event = $this->eventModel->getEventById($id); 
       $awards = $this->awardModel->getAwards($id);
+      $movies = $this->movieModel->getMovies();
+      $actors = $this->movieModel->getActors();
+      $directors = $this->movieModel->getDirectors();
+      $producers = $this->movieModel->getProducers();
+      $participants = $this->awardModel->getParticipantsInAwardsByEventId($id);
 
       $data = [
         'event_id' => $id,
         'event' => $event,
-        'awards' => $awards
+        'awards' => $awards,
+        'movies' => $movies,
+        'actors' => $actors,
+        'directors' => $directors,
+        'producers' => $producers,
+        'participants' => $participants
       ];
 
       echo '<pre>';
-      print_r($awards);
+      print_r($data);
       echo '</pre>';
 
       // array_map("clean_data", preg_split("/(\w*and\w*|[,]+)/",  $event->awards ) )
@@ -260,6 +271,10 @@
       }        
 
       return in_array(false, $results) ? false : true;
+    }
+
+    private function test($number = 0) {
+      return array(1, 2, 3, 4, 5);
     }
   }
 

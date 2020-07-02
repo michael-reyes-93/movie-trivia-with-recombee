@@ -24,7 +24,6 @@
       return $row;
     }
 
-
     public function addEvent($data) {
       $this->db->query('INSERT INTO events (name, year) VALUES (:name, :year)');
 
