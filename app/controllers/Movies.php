@@ -9,7 +9,7 @@
       $this->movieModel = $this->model('Movie');
       $this->soundtrackModel = $this->model('Soundtrack');
       $this->countryModel = $this->model('Country');
-      $this->categoryModel = $this->model('Category');
+      $this->genreModel = $this->model('Genre');
       // $this->userModel = $this->model('User');
     }
 
@@ -35,7 +35,7 @@
       $producerList = $this->movieModel->getProducers();
       $soundtrackList = $this->soundtrackModel->getSoundtracks();
       $countryList = $this->countryModel->getCountries();
-      $categoryList = $this->categoryModel->getCategories();
+      $genreList = $this->genreModel->getGenres();
       
       if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Sanitize POST array
@@ -63,7 +63,7 @@
           'producer_list' => $producerList,
           'soundtrack_list' => $soundtrackList,
           'country_list' => $countryList,
-          'category_list' => $categoryList,
+          'genre_list' => $genreList,
           // 'user_id' => $_SESSION['user_id'],
           'title_err' => '',
           'story_err' => '',
@@ -159,9 +159,9 @@
             redirect('movies');
           }
         } else {
-          echo '<pre>';
-          print_r($data);
-          echo '</pre>';
+          // echo '<pre>';
+          // print_r($data);
+          // echo '</pre>';
           // Load view with errors
           $this->view('movies/add', $data);
         }
@@ -180,7 +180,7 @@
           'producer_list' => $producerList,
           'soundtrack_list' => $soundtrackList,
           'country_list' => $countryList,
-          'category_list' => $categoryList,
+          'genre_list' => $genreList,
           'music_director' => '',
           'rating' => '',
           'original_language' => '',

@@ -115,32 +115,32 @@
       </div>
       <div class="form-row">
         <div class="col-2 mb-3">
-          <label for="categories">category: </label>
-          <select class="selectpicker form-control <?= (!empty($data['categories_err'])) ? 'is-invalid' : ''; ?>" name="categories[]" multiple data-actions-box="true" data-live-search="true">
-            <?php foreach($data['category_list'] as $category): ?>
-              <?php if (!empty($data['categories'])): ?>
-                <option <?= inarray($category->id, $data['categories']) ? 'selected' : ''; ?> value="<?= $category->id ?>"><?= $category->name ?></option>
+          <label for="genres">Movie Genre: </label>
+          <select id="genre-select" class="selectpicker form-control <?= (!empty($data['genres_err'])) ? 'is-invalid' : ''; ?>" name="genres[]" multiple data-actions-box="true" data-live-search="true">
+            <?php foreach($data['genre_list'] as $genre): ?>
+              <?php if (!empty($data['genre'])): ?>
+                <option <?= inarray($genre->genre_id, $data['genres']) ? 'selected' : ''; ?> value="<?= $genre->genre_id ?>"><?= $genre->name ?></option>
               <?php else: ?>
-                <option value="<?= $category->id ?>"><?= $category->name ?></option>
+                <option value="<?= $genre->genre_id ?>"><?= $genre->name ?></option>
               <?php endif ?>
             <?php endforeach ?>
           </select>
-          <span class="invalid-feedback"><?= $data['categories_err']; ?></span>
+          <span class="invalid-feedback"><?= $data['genres_err']; ?></span>
         </div>
         <div class="col-ml-2 mb-4 align-self-end">
-          <b class="align-baseline mr-3">If category is not listed, you can add it</b>
-          <a class="align-baseline toggle-category">
+          <b class="align-baseline mr-3">If genre is not listed, you can add it</b>
+          <a class="align-baseline toggle-genre">
           <!--  data-toggle="modal" data-target="#sign-out" -->
             <i class="fas fa-sign-out-alt text-danger fa-lg"></i>
           </a>
         </div>
       </div>
-      <div class="form-group" id="category" style="display:none;">
-        <label for="category"> category: <sup>*</sup></label>
-        <input type="text" name="category" class="form-control form-control-lg" id="category-name">
+      <div class="form-group" id="genre" style="display:none;">
+        <label for="genre"> genre: <sup>*</sup></label>
+        <input type="text" name="genre" class="form-control form-control-lg" id="genre-name">
         <span class="invalid-feedback"></span>
         <div class="mt-3">
-          <button type="button" onclick="myFunction2('<?= URLROOT; ?>/categories/test')" class="btn btn-success" id="category_add">Add Category</button>
+          <button type="button" onclick="myFunction2('<?= URLROOT; ?>/genres/test')" class="btn btn-success" id="genre_add">Add Genre</button>
         </div>
       </div>
       <div class="form-group">

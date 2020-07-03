@@ -1,12 +1,12 @@
 <?php
-  class Categories extends Controller {
+  class Genres extends Controller {
 
     public function __construct() {
       // if(!isLoggedIn()) {
       //   redirect('users/login');
       // }
 
-      $this->categoryModel = $this->model('Category');
+      $this->genreModel = $this->model('Genre');
       // $this->userModel = $this->model('User');
     }
 
@@ -17,17 +17,20 @@
 
         
         //print_r($_POST);
-        if (empty($_POST['category'])) {
-          $value = array('success' => false, 'msg1' => 'Please put a category', 'data' => $_POST);
+        if (empty($_POST['genre'])) {
+          $value = array('success' => false, 'msg1' => 'Please put a genre', 'data' => $_POST);
         }
 
         if ($value['success'])
         {
+          $genre_add_response = $this->genreModel->addGenre($_POST['genre']);
           // Validated
-          if ($this->categoryModel->addCategory($_POST['category'])) {
-            $value['msg1'] = "category added";
+          if ($genre_add_response['success']) {
+            $value['msg1'] = "genre added";
+            $value['genre_id'] = $genre_add_response['genre_id'];
           } else {
-            $value['success'] = "false";
+            $value['success'] = false;
+            $value['msg1'] = 'the genre name already exist';
           }
         } 
 

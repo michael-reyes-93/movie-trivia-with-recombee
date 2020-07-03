@@ -26,8 +26,8 @@ $(document).ready(function() {
     $("#country" ).fadeToggle("slow", "linear");
   });
 
-  $(".toggle-category" ).on( "click", function() {
-    $("#category" ).fadeToggle("slow", "linear");
+  $(".toggle-genre" ).on( "click", function() {
+    $("#genre" ).fadeToggle("slow", "linear");
   });
 
   // load options for select

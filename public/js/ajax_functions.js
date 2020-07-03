@@ -20,16 +20,25 @@ function myFunction(url) {
 }
 
 function myFunction2(url) {
-  category_name = $("#category-name").val();
-  console.log($("#country-name").val());
-  $.post(url, {category: category_name} ).done(function(data, textStatus, jqXHR) {
-    currentClass = $('#category input').attr('class');
+  let genre_name = $("#genre-name").val();
+  $.post(url, {genre: genre_name} ).done(function(data, textStatus, jqXHR) {
+    let currentClass = $('#genre input').attr('class');
     console.log(data);
     if (!data.success && !currentClass.includes("is-invalid")) {
-      $("#category input").toggleClass("is-invalid");
-      $("#category span").text(data.msg1);
-    } else if (data.success && currentClass.includes("is-invalid")){
-      $("#category input").toggleClass("is-invalid");
+      console.log("here");
+      $("#genre input").toggleClass("is-invalid");
+      $("#genre span").text(data.msg1);
+    } 
+    else if (data.success && currentClass.includes("is-invalid")){
+      $("#genre input").toggleClass("is-invalid");
+      $("#genre" ).fadeToggle("slow", "linear");
+      $('#genre-select').append($('<option value="' + data.genre_id + '">' + genre_name + '</option>'));
+      $('.selectpicker').selectpicker('refresh');
+    } 
+    else if (data.success && !currentClass.includes("is-invalid")) {
+      $("#genre" ).fadeToggle("slow", "linear");
+      $('#genre-select').append($('<option value="' + data.genre_id + '">' + genre_name + '</option>'));
+      $('.selectpicker').selectpicker('refresh');
     }
     
     //is-invalid

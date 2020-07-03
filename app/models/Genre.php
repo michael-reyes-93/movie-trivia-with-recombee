@@ -1,32 +1,32 @@
 <?php
-  class Category {
+  class Genre {
     private $db;
 
     public function __construct() {
       $this->db = new Database();
     }
 
-    public function getCategories() {
+    public function getGenres() {
       $this->db->query('SELECT genre_id, name FROM genres');
       $categories = $this->db->resultSet();
 
       return $categories;
     }
 
-    public function addCategory($category) {
-      $this->db->query('SELECT * FROM genres WHERE name LIKE "%' . $category . '%"');
+    public function addGenre($genre) {
+      $this->db->query('SELECT * FROM genres WHERE name LIKE "%' . $genre . '%"');
     
       $row = $this->db->single();
 
       if (empty($row)) {
 
-        $this->db->query('INSERT INTO genres (name) VALUES (:category)');
+        $this->db->query('INSERT INTO genres (name) VALUES (:genre_name)');
               
         // Bind Values
-        $this->db->bind(':category', $category);
+        $this->db->bind(':genre_name', $genre);
 
         if ($this->db->execute()) {
-          return true;
+          return array('success' => true, 'genre_id' => $this->db->lastInsertedId());
         } else {
           return false;
         }
