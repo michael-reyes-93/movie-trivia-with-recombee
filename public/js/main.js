@@ -31,9 +31,7 @@ $(document).ready(function() {
   });
 
   // load options for select
-  console.log($('#awards').find("option").length);
   if ($('#awards').find("option").length < 1) {  //Check condition here
-    console.log("something");
     $('#awards').empty().append('<option>select</option>');        
     // $.ajax({
     //         url: '/ci/ajaxcall/loadRoles.php',

@@ -1,4 +1,5 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
+
   <h1><?= $data['title'] ?></h1>
   <p>This is TraversyMVC PHP framework. Please refer to the docs on how to use it</p>
   <section class="bg-secondary py-4">

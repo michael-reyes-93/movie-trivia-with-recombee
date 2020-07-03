@@ -20,6 +20,8 @@ $(document).ready(function() {
   //   }
   // });
 
+  // $('.carousel').carousel()
+
   $('.carousel-group').each(function(index, value){
 
     $('#carouselExample' + index).on('slide.bs.carousel', function (e) { 

@@ -16,10 +16,12 @@
     public function index() {
       // Get Movies
       //$posts = $this->postModel->getPosts();
-      $movies = '';
+      $movies = $this->movieModel->getMovies();
+      $top5Movies = $this->movieModel->getTop5();
 
       $data = [
-        'movies' => $movies
+        'movies' => $movies,
+        'top_5' => $top5Movies
       ];
 
       $this->view('movies/index', $data);
@@ -194,10 +196,23 @@
       }
     }
 
+    public function top5Movies() {
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        print_r($_POST);
+        echo $this->movieModel->addToTop5($_POST['movie']) . '</br>';
+        //flash('participant_message', 'the participant name is incorrect', 'alert alert-danger');
+        header('Content-Type: application/json');
+        $output = json_encode(array('redirect' => URLROOT . '/movies/movies'));
+        echo $output;
+      } else {
+        // $data['test'] ='testing modal';
+      }
+    }
     private function modal($test) {
       
       return "<script>alert(" . $test . "); </script>";
     }
+    
 
 
 

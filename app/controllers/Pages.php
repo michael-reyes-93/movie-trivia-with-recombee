@@ -6,9 +6,12 @@
 
     public function index() {
       $movies = $this->movieModel->getMovies();
+      $top5Movies = $this->movieModel->getTop5();
+
       $data = [
         'title' => 'TraversyMVC',
-        'movies' => $movies
+        'movies' => $movies,
+        'top_5' => $top5Movies
       ];
 
       $this->view('pages/index', $data);

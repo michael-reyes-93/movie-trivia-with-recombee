@@ -100,4 +100,27 @@
 
       return $movies;
     }
+
+    public function addToTop5($movie_id) {
+      // $this->test();
+      $this->db->query('INSERT INTO top_5_movies (movie_id) VALUES (:movie_id)');
+
+      // Bind Values
+      $this->db->bind(':movie_id', $movie_id);
+      
+      // Execute
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    public function getTop5() {
+      $this->db->query('SELECT t.top_id, t.movie_id, m.title, m.poster FROM top_5_movies AS t INNER JOIN movies AS m ON t.movie_id = m.movie_id;');
+      $top_5 = $this->db->resultSet();
+  
+      return $top_5;
+    }
   }
+

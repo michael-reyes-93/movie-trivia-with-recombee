@@ -112,6 +112,20 @@ function deleteParticipant(url, participant_id, category, award_id) {
   });
 }
 
+function addMovieToTop5(url) {
+  console.log(url);
+  $.post(url, {movie: $("#top5-movie-picked").val()} )
+  .done(function(data, textStatus, jqXHR) {
+    console.log(data.redirect);
+    // window.location.href = data.redirect;
+    
+  }).fail(function(jqXHR, textStatus, errorThrown) 
+  {
+    console.log(jqXHR.responseText);
+    //failed
+  });
+}
+
 function fn1() {
   alert("external fn clicked");
 }
