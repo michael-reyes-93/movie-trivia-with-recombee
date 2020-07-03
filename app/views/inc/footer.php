@@ -5,5 +5,6 @@
   <script src="<?= URLROOT; ?>/js/ajax_functions.js"></script>
   <script src="<?= URLROOT; ?>/js/main.js"></script>
   <script src="<?= URLROOT; ?>/js/test.js"></script>
+  <script src="<?= URLROOT; ?>/js/carousel.js"></script>
 </body>
 </html>
