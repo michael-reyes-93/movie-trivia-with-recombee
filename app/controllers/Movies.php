@@ -11,6 +11,7 @@
       $this->countryModel = $this->model('Country');
       $this->genreModel = $this->model('Genre');
       $this->awardModel = $this->model('Award');
+      $this->languageModel = $this->model('Language');
       // $this->userModel = $this->model('User');
     }
 
@@ -38,6 +39,7 @@
       $countryList = $this->countryModel->getCountries();
       $genreList = $this->genreModel->getGenres();
       $moviesAwardsAvaible = $this->awardModel->getAwardsByCategory('m');
+      $languagesList = $this->languageModel->getLanguages();
       
       if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Sanitize POST array
@@ -67,6 +69,7 @@
           'soundtrack_list' => $soundtrackList,
           'country_list' => $countryList,
           'genre_list' => $genreList,
+          'languages_list' => $languagesList,
           'movie_awards_list' => $moviesAwardsAvaible,
           // 'user_id' => $_SESSION['user_id'],
           'title_err' => '',
@@ -185,6 +188,7 @@
           'soundtrack_list' => $soundtrackList,
           'country_list' => $countryList,
           'genre_list' => $genreList,
+          'languages_list' => $languagesList,
           'movie_awards_list' => $moviesAwardsAvaible,
           'music_director' => '',
           'rating' => '',

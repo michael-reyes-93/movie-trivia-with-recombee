@@ -1,4 +1,4 @@
-function myFunction(url) {
+function addCountry(url) {
   country_name = $("#country-name").val();
   console.log($("#country-name").val());
   $.post(url, {country: country_name} ).done(function(data, textStatus, jqXHR) {
@@ -19,7 +19,7 @@ function myFunction(url) {
   });
 }
 
-function myFunction2(url) {
+function addGenre(url) {
   let genre_name = $("#genre-name").val();
   $.post(url, {genre: genre_name} ).done(function(data, textStatus, jqXHR) {
     let currentClass = $('#genre input').attr('class');
@@ -38,6 +38,36 @@ function myFunction2(url) {
     else if (data.success && !currentClass.includes("is-invalid")) {
       $("#genre" ).fadeToggle("slow", "linear");
       $('#genre-select').append($('<option value="' + data.genre_id + '">' + genre_name + '</option>'));
+      $('.selectpicker').selectpicker('refresh');
+    }
+    
+    //is-invalid
+  }).fail(function(jqXHR, textStatus, errorThrown) 
+  {
+    console.log(jqXHR.responseText);
+    //failed
+  });
+}
+
+function addLanguage(url) {
+  let language_name = $("#language-name").val();
+  $.post(url, {language: language_name} ).done(function(data, textStatus, jqXHR) {
+    let currentClass = $('#language input').attr('class');
+    console.log(data);
+    if (!data.success && !currentClass.includes("is-invalid")) {
+      console.log("here");
+      $("#language input").toggleClass("is-invalid");
+      $("#language span").text(data.msg1);
+    } 
+    else if (data.success && currentClass.includes("is-invalid")){
+      $("#language input").toggleClass("is-invalid");
+      $("#language" ).fadeToggle("slow", "linear");
+      $('#original-language-select').append($('<option value="' + data.language_id + '">' + language_name + '</option>'));
+      $('.selectpicker').selectpicker('refresh');
+    } 
+    else if (data.success && !currentClass.includes("is-invalid")) {
+      $("#language" ).fadeToggle("slow", "linear");
+      $('#original-language-select').append($('<option value="' + data.language_id + '">' + language_name + '</option>'));
       $('.selectpicker').selectpicker('refresh');
     }
     

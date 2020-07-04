@@ -140,7 +140,7 @@
         <input type="text" name="genre" class="form-control form-control-lg" id="genre-name">
         <span class="invalid-feedback"></span>
         <div class="mt-3">
-          <button type="button" onclick="myFunction2('<?= URLROOT; ?>/genres/test')" class="btn btn-success" id="genre_add">Add Genre</button>
+          <button type="button" onclick="addGenre('<?= URLROOT; ?>/genres/test')" class="btn btn-success" id="genre_add">Add Genre</button>
         </div>
       </div>
       <div class="form-group">
@@ -176,7 +176,7 @@
         <input type="text" name="country" class="form-control form-control-lg" id="country-name">
         <span class="invalid-feedback"></span>
         <div class="mt-3">
-          <button type="button" onclick="myFunction2('<?= URLROOT; ?>/countries/test')" class="btn btn-success" id="country_add">Add Country</button>
+          <button type="button" onclick="addCountry('<?= URLROOT; ?>/countries/test')" class="btn btn-success" id="country_add">Add Country</button>
         </div>
       </div>
       <div class="form-group">
@@ -238,11 +238,48 @@
           <button type="button" class="btn btn-danger" id="award-status-remove"><i class="fas fa-minus-circle"></i></button>
         </div>
       <?php endif ?>
+      <div class="form-row">
+        <div class="col-2 mb-3">
+          <label for="original_language" style="color: red; font-weight: bold;">Original Language: </label>
+          <select id="original-language-select" class="selectpicker form-control <?= (!empty($data['original_language_err'])) ? 'is-invalid' : ''; ?>" name="original_language" multiple data-actions-box="true" data-live-search="true">
+            <?php foreach($data['languages_list'] as $language): ?>
+              <?php if (!empty($data['original_language'])): ?>
+                <option <?= $language->language_id == $data['original_language'] ? 'selected' : ''; ?> value="<?= $language->language_id ?>"><?= $language->name ?></option>
+              <?php else: ?>
+                <option value="<?= $language->language_id ?>"><?= $language->name ?></option>
+              <?php endif ?>
+            <?php endforeach ?>
+          </select>
+          <span class="invalid-feedback"><?= $data['original_language_err']; ?></span>
+        </div>
+        <div class="col-ml-2 mb-4 align-self-end">
+          <b class="align-baseline mr-3">If language is not listed, you can add it</b>
+          <a class="align-baseline toggle-language">
+          <!--  data-toggle="modal" data-target="#sign-out" -->
+            <i class="fas fa-sign-out-alt text-danger fa-lg"></i>
+          </a>
+        </div>
+      </div>
+      <div class="form-group" id="language" style="display:none;">
+        <label for="language"> language: <sup>*</sup></label>
+        <input type="text" name="language" class="form-control form-control-lg" id="language-name">
+        <span class="invalid-feedback"></span>
+        <div class="mt-3">
+          <button type="button" onclick="addLanguage('<?= URLROOT; ?>/languages/add')" class="btn btn-success" id="language_add">Add Language</button>
+        </div>
+      </div>
       <div class="form-group">
-        <label for="dubbed_languages" style="color: red; font-weight: bold;"> Dubbed Languages: <sup>*</sup></label>
-        <!-- <input type="text" name="streaming_on" class="form-control form-control-lg <?= (!empty($data['streaming_on_err'])) ? 'is-invalid' : ''; ?>" 
-        value="<?= $data['streaming_on']; ?>">
-        <span class="invalid-feedback"><?= $data['streaming_on_err']; ?></span> -->
+        <label for="dubbed_languages" style="color: red; font-weight: bold;">Dubbed Languages: </label>
+        <select id="dubbed-languages-select" class="selectpicker form-control <?= (!empty($data['genres_err'])) ? 'is-invalid' : ''; ?>" name="dubbed_languages[]" multiple data-actions-box="true" data-live-search="true">
+          <?php foreach($data['genre_list'] as $genre): ?>
+            <?php if (!empty($data['genre'])): ?>
+              <option <?= inarray($genre->genre_id, $data['genres']) ? 'selected' : ''; ?> value="<?= $genre->genre_id ?>"><?= $genre->name ?></option>
+            <?php else: ?>
+              <option value="<?= $genre->genre_id ?>"><?= $genre->name ?></option>
+            <?php endif ?>
+          <?php endforeach ?>
+        </select>
+        <span class="invalid-feedback"><?= $data['genres_err']; ?></span>
       </div>
       <div class="form-group">
         <label for="subtitles" style="color: red; font-weight: bold;"> Subtitles: <sup>*</sup></label>

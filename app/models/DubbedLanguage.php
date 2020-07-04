@@ -1,16 +1,16 @@
 <?php
-  class Genre {
+  class DubbedLanguage {
     private $db;
 
     public function __construct() {
       $this->db = new Database();
     }
 
-    public function getGenres() {
+    public function getDubbedLanguages() {
       $this->db->query('SELECT genre_id, name FROM genres');
-      $genres = $this->db->resultSet();
+      $categories = $this->db->resultSet();
 
-      return $genres;
+      return $categories;
     }
 
     public function addGenre($genre) {

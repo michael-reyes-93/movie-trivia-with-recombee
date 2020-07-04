@@ -31,6 +31,10 @@ $(document).ready(function() {
     $("#genre" ).fadeToggle("slow", "linear");
   });
 
+  $(".toggle-language" ).on( "click", function() {
+    $("#language" ).fadeToggle("slow", "linear");
+  });
+
   // load options for select
   if ($('#awards').find("option").length < 1) {  //Check condition here
     $('#awards').empty().append('<option>select</option>');        
