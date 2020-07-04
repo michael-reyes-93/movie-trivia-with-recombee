@@ -135,6 +135,28 @@ function addMovieToTop5(url) {
   });
 }
 
+function assignMovieToAward(url) {
+  url = url + '/movies/movieAwardsList';
+  
+  $.get(url)
+  .done(function(data, textStatus, jqXHR) {
+    let options = '';
+    let award_status = '';
+    data.forEach(award => {
+      options += `<option value="` + award.award_id + `">` + award.name + `</option>`;
+    });
+    award_status = `<div class="form-row align-items-center"><div class="form-group col-lg-10"><label for="movie_awards"> Award 1: <sup>*</sup></label><select class="selectpicker form-control" name="movie_awards[]" data-actions-box="true" data-live-search="true">` + options + `</select></div><div class="form-group col-lg-2"><label for="status">status in participation: </label><select class="col-5 selectpicker form-control" data-actions-box="true" name="status[]"><option value="nominated">nominated</option><option value="winner">winner</option></select></div></div>`;
+    $(award_status).insertAfter($('#awards-note'));
+    $('.selectpicker').selectpicker('render');
+    // window.location.href = data.redirect;
+    
+  }).fail(function(jqXHR, textStatus, errorThrown) 
+  {
+    console.log(jqXHR.responseText);
+    //failed
+  });
+}
+
 function fn1() {
   alert("external fn clicked");
 }

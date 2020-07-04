@@ -10,6 +10,7 @@
       $this->soundtrackModel = $this->model('Soundtrack');
       $this->countryModel = $this->model('Country');
       $this->genreModel = $this->model('Genre');
+      $this->awardModel = $this->model('Award');
       // $this->userModel = $this->model('User');
     }
 
@@ -36,6 +37,7 @@
       $soundtrackList = $this->soundtrackModel->getSoundtracks();
       $countryList = $this->countryModel->getCountries();
       $genreList = $this->genreModel->getGenres();
+      $moviesAwardsAvaible = $this->awardModel->getAwardsByCategory('m');
       
       if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Sanitize POST array
@@ -53,6 +55,7 @@
           'producers' => !empty($_POST['producers']) ? $_POST['producers'] : [],
           'soundtracks' => !empty($_POST['soundtracks']) ? $_POST['soundtracks'] : [],
           'countries' => !empty($_POST['countries']) ? $_POST['countries'] : [],
+          'awards_status' =>  $this->movie_awards($_POST['movie_awards'], $_POST['status']),
           'music_director' => $_POST['music_director'],
           'rating' => (float)$_POST['rating'],
           'original_language' => (int)$_POST['original_language'],
@@ -64,6 +67,7 @@
           'soundtrack_list' => $soundtrackList,
           'country_list' => $countryList,
           'genre_list' => $genreList,
+          'movie_awards_list' => $moviesAwardsAvaible,
           // 'user_id' => $_SESSION['user_id'],
           'title_err' => '',
           'story_err' => '',
@@ -159,9 +163,9 @@
             redirect('movies');
           }
         } else {
-          // echo '<pre>';
-          // print_r($data);
-          // echo '</pre>';
+          echo '<pre>';
+          print_r($data['awards_status']);
+          echo '</pre>';
           // Load view with errors
           $this->view('movies/add', $data);
         }
@@ -181,6 +185,7 @@
           'soundtrack_list' => $soundtrackList,
           'country_list' => $countryList,
           'genre_list' => $genreList,
+          'movie_awards_list' => $moviesAwardsAvaible,
           'music_director' => '',
           'rating' => '',
           'original_language' => '',
@@ -208,12 +213,68 @@
         // $data['test'] ='testing modal';
       }
     }
+
+    public function movieAwardsList() {
+      $new_arr = [];
+      foreach($this->awardModel->getAwardsByCategory('m') as $movie_award) {
+        array_push($new_arr, 
+          array(
+            'award_id' => $movie_award->award_id,
+            'name' => $movie_award->name
+          )
+        );
+      }
+
+      header('Content-Type: application/json');
+      $output = json_encode($new_arr);
+      echo $output;
+    }
+
     private function modal($test) {
       
       return "<script>alert(" . $test . "); </script>";
     }
     
+    private function movie_awards($arr1, $arr2, $arr3 = []) {
+      $new_arr = [];
+      foreach( $arr1 as $key => $a ) {
+        if(!empty($arr1) && !empty($arr2) && !empty($arr3)) {
+          //$new_arr['id'] = ;
+          array_push($new_arr, 
+            array(
+              'award_id' => $arr1[$key], 
+              'status' => $arr2[$key],
+              'id' => $key < count($arr1) - count($arr3) ? 'x' : $arr3[$key - (count($arr1) - count($arr3))]->award_id
+            )
+          );
+        } else if (!empty($arr1) && !empty($arr2)) {
+          array_push($new_arr, array(
+            'award_id' => $arr1[$key], 
+            'status' => $arr2[$key])
+          );
+        }
+      }
+  
+      return $new_arr;
+    }
 
+    private function checkErrors($arr) {
+      $results = [];
+
+      foreach ($arr as $award) {
+
+        if(empty($award['award_name_err'])) {
+          array_push($results, true);
+        } 
+        if(empty($award['category_err'])) {
+          array_push($results, true);
+        } else {
+          array_push($results, false);
+        }
+      }        
+
+      return in_array(false, $results) ? false : true;
+    }
 
 
   }

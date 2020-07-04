@@ -18,7 +18,7 @@
         <?= '<script>console.log(' . $key . ')</script>' ?>
         <div class="carousel-item <?= $key == 0 ? 'active' : '' ?>">
           <!-- <img class="d-block w-100 " src="<?= URLROOT; ?>/img/<?= $movieInTop->poster ?>" alt="First slide"> -->
-          <img class="d-block w-100" style="height: 800px" src="https://store-images.s-microsoft.com/image/apps.14525.9007199266246365.049d829a-83f4-4e3f-ab19-a193fbaea9a8.f67560f9-f742-41b6-a69d-2038af2d185f?mode=scale&q=90&h=1080&w=1920" alt="First slide">
+          <img class="d-block w-100" style="height: 800px" src="<?= $movieInTop->cover ?>" alt="First slide">
         </div>
       <?php endforeach; ?>
         <!-- <div class="carousel-item active">

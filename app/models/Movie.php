@@ -117,7 +117,7 @@
     }
 
     public function getTop5() {
-      $this->db->query('SELECT t.top_id, t.movie_id, m.title, m.poster FROM top_5_movies AS t INNER JOIN movies AS m ON t.movie_id = m.movie_id;');
+      $this->db->query('SELECT t.top_id, t.movie_id, m.title, m.poster, m.cover FROM top_5_movies AS t INNER JOIN movies AS m ON t.movie_id = m.movie_id;');
       $top_5 = $this->db->resultSet();
   
       return $top_5;

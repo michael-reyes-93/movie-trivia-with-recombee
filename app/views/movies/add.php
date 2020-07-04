@@ -185,12 +185,59 @@
         value="<?= $data['streaming_on']; ?>">
         <span class="invalid-feedback"><?= $data['streaming_on_err']; ?></span>
       </div>
-      <div class="form-group">
-        <label for="awards" style="color: red; font-weight: bold;"> Awards: <sup>*</sup></label>
-        <!-- <input type="text" name="streaming_on" class="form-control form-control-lg <?= (!empty($data['streaming_on_err'])) ? 'is-invalid' : ''; ?>" 
-        value="<?= $data['streaming_on']; ?>">
-        <span class="invalid-feedback"><?= $data['streaming_on_err']; ?></span> -->
+      <div class="form-row">
+        <div class="col-2 mb-3">
+          <label for="awards" class="mr-4" style="color: red; font-weight: bold;"> Awards: <sup>*</sup></label>
+          <button type="button" onclick="assignMovieToAward('<?= URLROOT; ?>')" class="btn btn-primary mb-3">Add Award Input</button>
+        </div>
       </div>
+      <b id="awards-note">If the award is not in the list, please add it inside the corresponding event. You can edit an existing event or add a new event</b>
+      <?php if(!empty($data['awards_status'])): ?>
+        <?php foreach($data['awards_status'] as $award_status): ?>
+          <div class="form-row align-items-center">
+            <div class="form-group col-lg-10">
+              <label for="movie_awards"> Award 1: <sup>*</sup></label>
+              <select class="selectpicker form-control <?= (!empty($data['countries_err'])) ? 'is-invalid' : ''; ?>" name="movie_awards[]" data-actions-box="true" data-live-search="true">
+              <?php foreach($data['movie_awards_list'] as $movie_award): ?>
+                <?php if (!empty($data['awards_status'])): ?>
+                  <option <?= $award_status['award_id'] == $movie_award->award_id ? 'selected' : ''; ?> value="<?= $movie_award->award_id ?>"><?= $movie_award->name ?></option>
+                <?php else: ?>
+                  <option value="<?= $movie_award->award_id ?>"><?= $movie_award->name ?></option>
+                <?php endif ?>
+              <?php endforeach ?>
+            </select>
+            </div>
+            <div class="form-group col-lg-2">
+              <label for="status">status in participation: </label>
+              <select class="col-5 selectpicker form-control" data-actions-box="true" name="status[]">
+                <option value="nominated">nominated</option>
+                <option value="winner">winner</option>
+              </select>
+            </div>
+          </div>
+        <?php endforeach ?>
+      <?php endif ?>
+
+      <?php if(empty($data['awards_status'])): ?>
+        <div class="form-row align-items-center">
+          <div class="form-group col-lg-8">
+            <label for="movie_awards"> Award 1: <sup>*</sup></label>
+            <select class="selectpicker form-control <?= (!empty($data['countries_err'])) ? 'is-invalid' : ''; ?>" name="movie_awards[]" data-actions-box="true" data-live-search="true">
+            <?php foreach($data['movie_awards_list'] as $movie_award): ?>
+              <option value="<?= $movie_award->award_id ?>"><?= $movie_award->name ?></option>
+            <?php endforeach ?>
+          </select>
+          </div>
+          <div class="form-group col-lg-2">
+            <label for="status">status in participation: </label>
+            <select class="col-5 selectpicker form-control" data-actions-box="true" name="status[]">
+              <option value="nominated">nominated</option>
+              <option value="winner">winner</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-danger" id="award-status-remove"><i class="fas fa-minus-circle"></i></button>
+        </div>
+      <?php endif ?>
       <div class="form-group">
         <label for="dubbed_languages" style="color: red; font-weight: bold;"> Dubbed Languages: <sup>*</sup></label>
         <!-- <input type="text" name="streaming_on" class="form-control form-control-lg <?= (!empty($data['streaming_on_err'])) ? 'is-invalid' : ''; ?>" 

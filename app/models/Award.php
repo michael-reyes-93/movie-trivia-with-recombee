@@ -80,4 +80,14 @@
 
       return $participants;
     }
+
+    public function getAwardsByCategory($category) {
+      $this->db->query('SELECT award_id, name FROM awards WHERE category = :category;');
+
+      $this->db->bind(':category', $category);
+
+      $awardsByCategory = $this->db->resultSet();
+
+      return $awardsByCategory;
+    }
   }

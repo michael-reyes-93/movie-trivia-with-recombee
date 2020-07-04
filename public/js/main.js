@@ -2,6 +2,7 @@ $(document).ready(function() {
 
   $(function () {
     $('select').selectpicker();
+    $('[data-toggle="tooltip"]').tooltip();
   });
 
   $("#countries").on("change", function() {
@@ -77,6 +78,15 @@ $(document).ready(function() {
     $(award_div).insertAfter(this);
     $('.selectpicker').selectpicker('render');
  
+  });
+
+  $("#assign-movie-to-award").click(function () {
+
+ 
+  });
+
+  $('#award-status-remove').click(function () {
+    $(this).parent().remove();
   });
 
 });
