@@ -25,7 +25,7 @@
         {
           $genre_add_response = $this->genreModel->addGenre($_POST['genre']);
           // Validated
-          if ($genre_add_response['success']) {
+          if ($genre_add_response) {
             $value['msg1'] = "genre added";
             $value['genre_id'] = $genre_add_response['genre_id'];
           } else {
