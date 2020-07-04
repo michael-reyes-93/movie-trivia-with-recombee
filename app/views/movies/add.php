@@ -246,7 +246,7 @@
               <?php if (!empty($data['original_language'])): ?>
                 <option <?= $language->language_id == $data['original_language'] ? 'selected' : ''; ?> value="<?= $language->language_id ?>"><?= $language->name ?></option>
               <?php else: ?>
-                <option value="<?= $language->language_id ?>"><?= $language->name ?></option>
+                <option value="<?= $language->language_id ?>"><?= $language->language ?></option>
               <?php endif ?>
             <?php endforeach ?>
           </select>
