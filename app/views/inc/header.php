@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link rel="stylesheet" href="<?= URLROOT; ?>/css/style.css">
     <link rel="stylesheet" href="<?= URLROOT; ?>/css/carousel.css">
+    <link rel="stylesheet" href="<?= URLROOT; ?>/css/star-rating.css">
     <title><?= SITENAME; ?></title>
     <!-- <style>
     .card-shadow {
