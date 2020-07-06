@@ -1,5 +1,5 @@
 <?php
-  class DubbedLanguage {
+  class SubtitleLanguage {
     private $db;
 
     public function __construct() {
@@ -13,9 +13,9 @@
     //   return $categories;
     // }
 
-    public function addDubbedLanguageForMovie($language_id, $movie_id) {
+    public function addSubtitleLanguageForMovie($language_id, $movie_id) {
 
-      $this->db->query('INSERT INTO dubbed_movies (language_id, movie_id) VALUES (:language_id, :movie_id)');
+      $this->db->query('INSERT INTO subtitles_movies (language_id, movie_id) VALUES (:language_id, :movie_id)');
               
       // Bind Values
       $this->db->bind(':language_id', $language_id);

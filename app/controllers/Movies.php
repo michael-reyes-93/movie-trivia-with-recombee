@@ -14,6 +14,8 @@
       $this->languageModel = $this->model('Language');
       $this->participantModel = $this->model('Participant');
       $this->imageModel = $this->model('Image');
+      $this->dubbedLanguageModel = $this->model('DubbedLanguage');
+      $this->subtitleLanguageModel = $this->model('SubtitleLanguage');
       // $this->userModel = $this->model('User');
     }
 
@@ -236,14 +238,21 @@
           // Validated
           $movie_response = $this->movieModel->addMovie($data);
           echo "<script>console.log(" . $movie_response[0] . ")</script>";
+          $movie_id = $movie_response[1];
           if ($movie_response[0]) {
             if (!empty($data['awards_status'])) {
               foreach($data['awards_status'] as $award_status) {
-                $this->participantModel->addParticipantToAward($award_status['status'], $movie_response[1], $award_status['award_id'], 'm');
+                $this->participantModel->addParticipantToAward($award_status['status'], $movie_id, $award_status['award_id'], 'm');
               }
             }
 
-            
+            foreach($data['dubbed_languages'] as $dubbed_language) {
+              $this->dubbedLanguageModel->addDubbedLanguageForMovie($dubbed_language, $movie_id);
+            }
+
+            foreach($data['subtitle_languages'] as $subtitle_language) {
+              $this->subtitleLanguageModel->addSubtitleLanguageForMovie($subtitle_language, $movie_id);
+            }
 
             flash('post_message', 'Movie Added');
             redirect('movies');
@@ -252,9 +261,9 @@
           $this->view('movies/add', $data);
 
         } else {
-          // echo '<pre>';
-          // print_r($data['no_catalog_photo']);
-          // echo '</pre>';
+          echo '<pre>';
+          print_r($data);
+          echo '</pre>';
           // Load view with errors
           $this->view('movies/add', $data);
         }

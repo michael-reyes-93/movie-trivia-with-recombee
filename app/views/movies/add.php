@@ -1,4 +1,5 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
+  <!-- fluid -->
   <div class="container">
     <a href="<?= URLROOT; ?>/movies" class="btn btn-light align-self-start"><i class="fa fa-backward"></i> Back</a>
     <div class="card card-body bg-light row col-xl-10 mt-5">
@@ -31,7 +32,7 @@
                 <img id="poster-preview" src="<?= URLROOT . '/img/posters/' . $data['poster'] ?>" style="width:343px;height:500px;" alt="your image"/>
               </div>
               <div class="text-center">
-                Poster Large
+                Poster Large Preview
               </div>
             </div>
             <div class="col mx-5">
@@ -39,7 +40,7 @@
                 <img id="poster-preview-2" src="<?= URLROOT . '/img/posters/' . $data['poster'] ?>" style="width:196px;height:289px;" alt="your image"/>
               </div>
               <div class="text-center">
-                Poster Small
+                Poster Small Preview
               </div>
             </div>
           </div>
@@ -58,7 +59,7 @@
                 <img id="catalog-photo-preview" src="<?= !empty($data['no_catalog_photo']) ? $data['no_catalog_photo'] : URLROOT . '/img/catalog/' . $data['catalog_photo'] ?>" style="width:341px;height:192px;" alt="your image"/>
               </div>
               <div class="text-center">
-                Imagen 1
+                Catalog Image Preview
               </div>
             </div>
           </div>
