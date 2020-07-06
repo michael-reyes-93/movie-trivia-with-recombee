@@ -8,12 +8,13 @@
 
     public function addMovie($data) {
       // $this->test();
-      $this->db->query('INSERT INTO movies (title, story, poster, release_date, budget, return_of_investment, director_id, music_director, raiting, original_language, country, streaming_on) VALUES (:title, :story, :poster, :release_date, :budget, :return_of_investment, :director_id, :music_director, :rating, :original_language, :country, :streaming_on)');
+      $this->db->query('INSERT INTO movies (title, story, poster, catalog_photo, release_date, budget, return_of_investment, director_id, music_director, raiting, original_language_id, origin_country_id, streaming_on) VALUES (:title, :story, :poster, :catalog_photo, :release_date, :budget, :return_of_investment, :director_id, :music_director, :rating, :original_language, :origin_country, :streaming_on)');
 
       // Bind Values
       $this->db->bind(':title', $data['title']);
       $this->db->bind(':story', $data['story']);
       $this->db->bind(':poster', $data['poster']);
+      $this->db->bind(':catalog_photo', $data['catalog_photo']);
       $this->db->bind(':release_date', '1994-08-05');
       $this->db->bind(':budget', $data['budget']);
       $this->db->bind(':return_of_investment', $data['return_of_investment']);
@@ -21,7 +22,7 @@
       $this->db->bind(':music_director', $data['music_director']);
       $this->db->bind(':rating', $data['rating']);
       $this->db->bind(':original_language', $data['original_language']);
-      $this->db->bind(':country', $data['country']);
+      $this->db->bind(':origin_country', $data['origin_country']);
       $this->db->bind(':streaming_on', $data['streaming_on']);
 
       // Execute
@@ -60,7 +61,7 @@
           $this->db->execute() ? array_push($results, true) : array_push($results, false);
         }
 
-        return in_array(false, $results) ? false : true;
+        return array(in_array(false, $results) ? false : true, $movie_id);
       } else {
         return false;
       }

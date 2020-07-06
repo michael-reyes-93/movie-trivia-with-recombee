@@ -2,6 +2,7 @@
   class Pages extends Controller{
     public function __construct() {
       $this->movieModel = $this->model('Movie');
+      $this->imageModel = $this->model('Image');
     }
 
     public function index() {
@@ -18,8 +19,11 @@
     }
 
     public function about() {
+      $uploaded_images = $this->imageModel->getUploadedImages();
+
       $data = [
-        'title' => 'About Us'
+        'title' => 'About Us',
+        'top_5' => $uploaded_images
       ];
       
       $this->view('pages/about', $data);

@@ -12,6 +12,8 @@
       $this->genreModel = $this->model('Genre');
       $this->awardModel = $this->model('Award');
       $this->languageModel = $this->model('Language');
+      $this->participantModel = $this->model('Participant');
+      $this->imageModel = $this->model('Image');
       // $this->userModel = $this->model('User');
     }
 
@@ -49,6 +51,7 @@
           'title' => trim($_POST['title']),
           'story' => trim($_POST['story']),
           'poster' => $_POST['poster'],
+          'catalog_photo' => $_POST['catalog_photo'],
           'release_date' => $_POST['release_date'],
           'budget' => (float)$_POST['budget'],
           'return_of_investment' => (float)$_POST['return_of_investment'],
@@ -57,12 +60,15 @@
           'producers' => !empty($_POST['producers']) ? $_POST['producers'] : [],
           'soundtracks' => !empty($_POST['soundtracks']) ? $_POST['soundtracks'] : [],
           'countries' => !empty($_POST['countries']) ? $_POST['countries'] : [],
-          'awards_status' =>  $this->movie_awards($_POST['movie_awards'], $_POST['status']),
+          'awards_status' =>  !empty($_POST['movie_awards']) && !empty($_POST['status']) ? $this->movie_awards($_POST['movie_awards'], $_POST['status']) : [],
           'music_director' => $_POST['music_director'],
           'rating' => (float)$_POST['rating'],
+          'genres' => !empty($_POST['genres']) ? $_POST['genres'] : [],
           'original_language' => (int)$_POST['original_language'],
-          'country' => (int)$_POST['country'],
+          'origin_country' => (int)$_POST['origin_country'],
           'streaming_on' => $_POST['streaming_on'],
+          'dubbed_languages' => !empty($_POST['dubbed_languages']) ? $_POST['dubbed_languages'] : [],
+          'subtitle_languages' => !empty($_POST['subtitle_languages']) ? $_POST['subtitle_languages'] : [],
           'director_list' => $directorList,
           'actor_list' => $actorList,
           'producer_list' => $producerList,
@@ -72,7 +78,7 @@
           'languages_list' => $languagesList,
           'movie_awards_list' => $moviesAwardsAvaible,
           // 'user_id' => $_SESSION['user_id'],
-          'title_err' => '',
+          // 'title_err' => '',
           'story_err' => '',
           'poster_err' => '',
           'release_date_err' => '',
@@ -95,9 +101,39 @@
         if (empty($data['story'])) {
           $data['story_err'] = 'Please enter description text';
         }
+        // La funcion getimagesize nos retorna un arreglo de propiedades de la imagen y si no es una imagen retorna false y un error notice.
+        // Podemos utilizar el @ antes de la funcion para omitir el notice si no es una imagen.
         $check = @getimagesize($_FILES['photo']['tmp_name']);
         if ($check === false) {
           $data['poster_err'] = 'Please upload a photo for the poster';
+        }
+        if (!empty($_FILES['uploaded_poster']['name'])) {
+          // Save images in the server
+          $folder = 'img/posters/';
+          $uploaded_file = $folder . $_FILES['uploaded_poster']['name'];
+          move_uploaded_file($_FILES['uploaded_poster']['tmp_name'], $uploaded_file);
+          // save image name in server
+          $this->imageModel->addImage($_FILES['uploaded_poster']['name']);
+          $data['poster'] = $_FILES['uploaded_poster']['name'];
+
+          // $this->deleteImage('delete_image_4.jpg');
+        }
+        if (empty($data['poster'])) {
+          $data['photo_err'] = 'Please upload a photo';
+        }
+        if (!empty($_FILES['uploaded_catalog_photo']['name'])) {
+          // Save images in the server
+          $folder = 'img/catalog/';
+          $uploaded_file = $folder . $_FILES['uploaded_catalog_photo']['name'];
+          move_uploaded_file($_FILES['uploaded_catalog_photo']['tmp_name'], $uploaded_file);
+          // save image name in server
+          $this->imageModel->addImage($_FILES['uploaded_catalog_photo']['name']);
+          $data['catalog_photo'] = $_FILES['uploaded_catalog_photo']['name'];
+
+          // $this->deleteImage('delete_image_4.jpg');
+        }
+        if (empty($data['catalog_photo'])) {
+          $data['no_catalog_photo'] = 'http://placehold.it/341x192?text=' . (empty($data['title']) ? 'catalog photo' : $data['title']);
         }
         if (empty($data['release_date'])) {
           $data['release_date_err'] = 'Please choose a date';
@@ -111,22 +147,54 @@
         if (empty($data['director'])) {
           $data['director_err'] = 'Please enter a director id';
         }
+        if (empty($data['cast'])) {
+          $data['cast_err'] = 'Please select cast members';
+        }
+        if (empty($data['producers'])) {
+          $data['producers_err'] ='Please select producers involved in the movie';
+        }
         if (empty($data['music_director'])) {
           $data['music_director_err'] = 'Please enter a music director name';
+        }
+        if (empty($data['soundtracks'])) {
+          $data['soundtracks_err'] = 'Please select one or multiple soundtracks';
         }
         if (empty($data['rating'])) {
           $data['rating_err'] = 'Please enter a rating number';
         }
+        if (empty($data['genres'])) {
+          $data['genres_err'] = 'Please select one o more genres';
+        }
+        // original language err
+        // origin country
         if (empty($data['original_language'])) {
           $data['original_language_err'] = 'Please enter a languaje id';
         }
-        if (empty($data['country'])) {
-          $data['country_err'] = 'Please enter a country id';
+        if (empty($data['origin_country'])) {
+          $data['origin_country_err'] = 'Please enter a country id';
         }
         if (empty($data['streaming_on'])) {
           $data['streaming_on_err'] = 'Please enter a streaming on  option';
         }
         
+        // foreach ($data['awards_status'] as $key => $award_status) {
+
+        //   if(empty($award_status['award_id'])) {
+        //     $data['awards'][$key]['award_name_err'] = 'invalid award name';
+        //   }
+          
+        //   if($data['awards'][$key]['category'] == 'x') {
+        //     $data['awards'][$key]['category_err'] = 'invalid award category';
+        //   }  
+        // } 
+
+        if (empty($data['dubbed_languages'])) {
+          $data['dubbed_languages_err'] = 'Please select one or more languages';
+        }
+        if (empty($data['subtitle_languages'])) {
+          $data['subtitle_languages_err'] = 'Please select one or more languages for subtitles';
+        }
+
         // if ($check !== false){
         //     $carpeta_destino = 'fotos/';
         //     $archivo_subido = $carpeta_destino . $_FILES['foto']['name'];
@@ -144,31 +212,49 @@
         // }
 
         // Make sure no errors
-        if (empty($data['title_err']) && 
+        if (
+          empty($data['title_err']) && 
             empty($data['story_err']) &&
             empty($data['photo_err']) &&
             empty($data['release_date_err']) &&
             empty($data['budget_err']) &&
             empty($data['return_of_investment_err']) &&
             empty($data['director_err']) &&
+            empty($data['cast_err']) &&
+            empty($data['producers_err']) &&
             empty($data['music_director_err']) && 
+            empty($data['soundtracks_err']) &&
             empty($data['rating_err']) &&
+            empty($data['genres_err']) &&
             empty($data['original_language_err']) &&
-            empty($data['country_err']) &&
-            empty($data['streaming_on_err']))
+            empty($data['origin_country_err']) &&
+            empty($data['streaming_on_err']) &&
+            empty($data['dubbed_languages_err']) &&
+            empty($data['subtitle_languages_err'])
+        )
         {
-          $folder = 'img/posters/';
-          $uploaded_file = $folder . $_FILES['photo']['name'];
-          move_uploaded_file($_FILES['photo']['tmp_name'], $uploaded_file);
           // Validated
-          if ($this->movieModel->addMovie($data)) {
+          $movie_response = $this->movieModel->addMovie($data);
+          echo "<script>console.log(" . $movie_response[0] . ")</script>";
+          if ($movie_response[0]) {
+            if (!empty($data['awards_status'])) {
+              foreach($data['awards_status'] as $award_status) {
+                $this->participantModel->addParticipantToAward($award_status['status'], $movie_response[1], $award_status['award_id'], 'm');
+              }
+            }
+
+            
+
             flash('post_message', 'Movie Added');
             redirect('movies');
           }
+
+          $this->view('movies/add', $data);
+
         } else {
-          echo '<pre>';
-          print_r($data['awards_status']);
-          echo '</pre>';
+          // echo '<pre>';
+          // print_r($data['no_catalog_photo']);
+          // echo '</pre>';
           // Load view with errors
           $this->view('movies/add', $data);
         }
@@ -179,6 +265,7 @@
           'title' => '',
           'story' => '',
           'poster' => '',
+          'catalog_photo' => '',
           'release_date' => '',
           'budget' => '',
           'return_of_investment' => '',
@@ -197,9 +284,9 @@
           'streaming_on' => '',
         ];
 
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
 
         $this->view('movies/add', $data);
       }
@@ -278,6 +365,10 @@
       }        
 
       return in_array(false, $results) ? false : true;
+    }
+
+    private function deleteImage($image_name) {
+      unlink('img/' . $image_name);
     }
 
 

@@ -35,6 +35,42 @@ $(document).ready(function() {
     $("#language" ).fadeToggle("slow", "linear");
   });
 
+  $("#uploaded_poster").change(function(){
+    console.log($(this)[0].files[0]);
+    if ($(this)[0].files && $(this)[0].files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+       
+        $('#poster-preview').attr('src', e.target.result)
+
+        $('#poster-preview-2').attr('src', e.target.result)
+          
+        $("#posters-preview" ).fadeIn( "slow" );
+      };
+
+      reader.readAsDataURL($(this)[0].files[0]);
+      
+    }
+  });
+
+  $("#uploaded_catalog_photo").change(function(){
+    console.log($(this)[0].files[0]);
+    if ($(this)[0].files && $(this)[0].files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+       
+        $('#catalog-photo-preview').attr('src', e.target.result)
+          
+        $("#catalog-preview").fadeIn( "slow" );
+      };
+
+      reader.readAsDataURL($(this)[0].files[0]);
+      
+    }
+  });
+
   // load options for select
   if ($('#awards').find("option").length < 1) {  //Check condition here
     $('#awards').empty().append('<option>select</option>');        
@@ -89,11 +125,14 @@ $(document).ready(function() {
  
   });
 
-  $('#award-status-remove').click(function () {
+  $(document).on('click','.award-status-remove', function(){
+    console.log("something");
     $(this).parent().remove();
   });
 
 });
+
+
 
 function myNewFunction(url) {
   fn1();
