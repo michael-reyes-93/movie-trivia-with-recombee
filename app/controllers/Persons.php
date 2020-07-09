@@ -199,7 +199,7 @@
       } else {
         $roles = [];
 
-        // Get existing post from model
+        // Get existing person from model
         $person = $this->personModel->getPersonById($id); 
 
         // Check for owner
