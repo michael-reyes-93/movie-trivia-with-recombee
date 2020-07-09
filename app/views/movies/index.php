@@ -83,7 +83,7 @@
               <!-- <a href="<?= URLROOT; ?>/participants/modal" class="btn btn-primary float-right" > -->
               
               <!-- </a> -->
-            </div>
+          </div>
           </div>
 
           <!-- modal -->
