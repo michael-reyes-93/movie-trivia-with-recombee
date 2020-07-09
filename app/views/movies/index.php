@@ -77,13 +77,6 @@
 
               </div>
             </div>
-            <div class="card-footer">
-              <!-- data-toggle="modal" data-target="#sign-out" -->
-              <!-- href="<?= URLROOT; ?>/participants/add/<?= $award->award_id ?>" -->
-              <!-- <a href="<?= URLROOT; ?>/participants/modal" class="btn btn-primary float-right" > -->
-              
-              <!-- </a> -->
-          </div>
           </div>
 
           <!-- modal -->
@@ -113,6 +106,43 @@
           </div>
           <!-- end of modal -->
         </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-xl-8 col-lg-6 col-md-8">
+        <div class="row align-items-center justify-content-center">
+          <div class="col-xl-10 col-12 mb-4 mb-xl-0">
+            <h3 class="text-muted text-center mb-3">Movies</h3>
+            <table class="table table-striped bg-light text-center">
+              <thead>
+                <tr class="text-muted">
+                  <th>Title</th>
+                  <th>Language</th>
+                  <th>Country</th>
+                  <th>Options</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($data['movies'] as $movie): ?>
+                  <tr>
+                    <th><?= $movie->title ?></th>
+                    <td><?= $movie->language ?></td>
+                    <td><?= $movie->country ?></td>
+                    <td>
+                      <a href="<?= URLROOT; ?>/movies/edit/<?= $movie->movie_id ?>" class="btn btn-primary"><i class="far fa-edit"></i></a>
+                      <a href="<?= URLROOT; ?>/persons/show/<?= $person->person_id ?>" class="btn btn-primary"><i class="far fa-eye"></i></a>
+                      <a href="<?= URLROOT; ?>/persons/show/<?= $person->person_id ?>" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
+                      <!-- <a href="#" class="btn"><i class="far fa-eye"></a> -->
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 <?php require APPROOT . '/views/inc/footer.php'; ?>
