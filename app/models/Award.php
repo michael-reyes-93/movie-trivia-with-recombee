@@ -90,4 +90,49 @@
 
       return $awardsByCategory;
     }
+
+    public function addSubtitleLanguageForMovie($language_id, $movie_id) {
+
+      $this->db->query('INSERT INTO subtitles_movies (language_id, movie_id) VALUES (:language_id, :movie_id)');
+              
+      // Bind Values
+      $this->db->bind(':language_id', $language_id);
+      $this->db->bind(':movie_id', $movie_id);
+
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    public function updateAwardForMovie($table_id, $new_award_id) {   
+      $this->db->query('UPDATE award_participant_movie SET award_id = :new_award_id WHERE id = :table_id');
+              
+      // Bind Values
+      $this->db->bind(':new_award_id', $new_award_id);
+      $this->db->bind(':table_id', $table_id);
+
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
+
+    public function deleteAwardForMovie($table_id) {   
+      $this->db->query('DELETE FROM award_participant_movie WHERE id = :table_id');
+
+      // Bind Values
+      $this->db->bind(':table_id', $table_id);
+
+      // Execute
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
   }

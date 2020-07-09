@@ -175,8 +175,8 @@ function assignMovieToAward(url) {
     data.forEach(award => {
       options += `<option value="` + award.award_id + `">` + award.name + `</option>`;
     });
-    award_status = `<div class="form-row align-items-center"><div class="form-group col-lg-8"><label for="movie_awards"> Award 1: <sup>*</sup></label><select class="selectpicker form-control" name="movie_awards[]" data-actions-box="true" data-live-search="true">` + options + `</select></div><div class="form-group col-lg-2"><label for="status">status in participation: </label><select class="col-5 selectpicker form-control" data-actions-box="true" name="status[]"><option value="nominated">nominated</option><option value="winner">winner</option></select></div><button type="button" class="btn btn-danger award-status-remove"><i class="fas fa-minus-circle"></i></button></div>`;
-    $(award_status).insertAfter($('#awards-note'));
+    award_status = `<div class="form-row align-items-center"><div class="form-group col-lg-7"><label for="movie_awards"> Award 1: <sup>*</sup></label><select class="selectpicker form-control" name="movie_awards[]" data-actions-box="true" data-live-search="true">` + options + `</select></div><div class="form-group col-lg-4"><label for="status">status in participation: </label><select class="col-6 selectpicker form-control" data-actions-box="true" name="status[]"><option value="nominated">nominated</option><option value="winner">winner</option></select></div><button type="button" class="btn btn-danger award-status-remove"><i class="fas fa-minus-circle"></i></button></div>`;
+    $('#awards-with-status').append($(award_status));
     $('.selectpicker').selectpicker('render');
     // window.location.href = data.redirect;
     

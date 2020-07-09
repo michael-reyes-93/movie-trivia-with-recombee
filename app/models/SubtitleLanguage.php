@@ -27,4 +27,34 @@
         return false;
       }
     }
+
+    public function updateSubtitleLanguageForMovie($table_id, $old_language_id, $new_language_id, $movie_id) {   
+      $this->db->query('UPDATE subtitles_movies SET language_id = :new_language_id WHERE id = :table_id');
+              
+      // Bind Values
+      $this->db->bind(':new_language_id', $new_language_id);
+      $this->db->bind(':table_id', $table_id);
+
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
+
+    public function deleteSubtitleLanguageForMovie($table_id, $movie_id) {   
+      $this->db->query('DELETE FROM subtitles_movies WHERE id = :table_id');
+
+      // Bind Values
+      $this->db->bind(':table_id', $table_id);
+
+      // Execute
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
   }

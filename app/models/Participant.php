@@ -140,4 +140,49 @@
     //     return false;
     //   }
     // }
+
+    // public function addSubtitleLanguageForMovie($language_id, $movie_id) {
+
+    //   $this->db->query('INSERT INTO subtitles_movies (language_id, movie_id) VALUES (:language_id, :movie_id)');
+              
+    //   // Bind Values
+    //   $this->db->bind(':language_id', $language_id);
+    //   $this->db->bind(':movie_id', $movie_id);
+
+    //   if ($this->db->execute()) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }
+
+    public function updateMovieParticipantStatus($participant_id, $new_status) {   
+      $this->db->query('UPDATE participants SET status = :new_status WHERE participant_id = :participant_id');
+              
+      // Bind Values
+      $this->db->bind(':participant_id', $participant_id);
+      $this->db->bind(':new_status', $new_status);
+
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
+
+    public function deleteMovieParticipant($participant_id) {   
+      $this->db->query('DELETE FROM participants WHERE participant_id = :participant_id');
+
+      // Bind Values
+      $this->db->bind(':participant_id', $participant_id);
+
+      // Execute
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
   }

@@ -67,6 +67,36 @@
       }
     }
 
+    public function updateMovie($data) {
+      // $this->test();
+      $this->db->query('UPDATE movies SET title = :title, story = :story, poster = :poster, catalog_photo = :catalog_photo, release_date = :release_date, budget = :budget, return_of_investment = :return_of_investment, director_id = :director_id, music_director = :music_director, raiting = :raiting, original_language_id = :original_language_id, origin_country_id = :origin_country_id, streaming_on = :streaming_on WHERE movie_id = :movie_id;');
+
+      // Bind Values
+      $this->db->bind(':title', $data['title']);
+      $this->db->bind(':story', $data['story']);
+      $this->db->bind(':poster', $data['poster']);
+      $this->db->bind(':catalog_photo', $data['catalog_photo']);
+      $this->db->bind(':release_date', '1994-08-05');
+      $this->db->bind(':budget', $data['budget']);
+      $this->db->bind(':return_of_investment', $data['return_of_investment']);
+      $this->db->bind(':director_id', $data['director']);
+      $this->db->bind(':music_director', $data['music_director']);
+      $this->db->bind(':raiting', $data['rating']);
+      $this->db->bind(':original_language_id', $data['original_language']);
+      $this->db->bind(':origin_country_id', $data['origin_country']);
+      $this->db->bind(':streaming_on', $data['streaming_on']);
+      $this->db->bind(':movie_id', $data['movie_id']);
+     
+      // Execute
+      //return $this->db->test();
+      if ($this->db->execute()) {
+        return array(true);
+      } else {
+        return false;
+      }
+         
+    }
+
     public function getMoviesTitleWithId() {
       $this->db->query('SELECT movie_id, title FROM movies');
       $results = $this->db->resultSet();
@@ -96,10 +126,21 @@
     }
 
     public function getMovies() {
-      $this->db->query('SELECT movie_id, title FROM movies');
+      $this->db->query('SELECT m.movie_id, m.title, l.language, c.country FROM movies AS m LEFT JOIN languages AS l ON m.original_language_id = l.language_id LEFT JOIN countries AS c ON m.origin_country_id = c.id;');
+      
       $movies = $this->db->resultSet();
 
       return $movies;
+    }
+
+    public function getMovieById($movie_id) {
+      $this->db->query('SELECT * FROM movies WHERE movie_id = :movie_id;');
+
+      $this->db->bind(':movie_id', $movie_id);
+
+      $row = $this->db->single();
+
+      return $row;
     }
 
     public function addToTop5($movie_id) {
@@ -123,5 +164,78 @@
   
       return $top_5;
     }
+
+    public function getCastByMovieId($movie_id) {
+      $this->db->query('SELECT c.actor_id FROM movies AS m INNER JOIN cast AS c ON m.movie_id = c.movie_id WHERE m.movie_id = :movie_id;');
+
+      $this->db->bind(':movie_id', $movie_id);
+
+      $cast = $this->db->resultSet();
+
+      return $cast;
+    }
+
+    public function getProducersByMovieId($movie_id) {
+      $this->db->query('SELECT p.producer_id FROM movies AS m INNER JOIN producers AS p ON m.movie_id = p.movie_id WHERE m.movie_id = :movie_id;');
+
+      $this->db->bind(':movie_id', $movie_id);
+
+      $producers = $this->db->resultSet();
+
+      return $producers;
+    }
+
+    public function getSoundtracksByMovieId($movie_id) {
+      $this->db->query('SELECT ms.soundtrack_id FROM movies AS m INNER JOIN movies_soundtracks AS ms ON m.movie_id = ms.movie_id WHERE m.movie_id = :movie_id;');
+      
+      $this->db->bind(':movie_id', $movie_id);
+
+      $soundtracks = $this->db->resultSet();
+
+      return $soundtracks;
+    }
+
+    public function getGenresByMovieId($movie_id) {
+      $this->db->query('SELECT mg.id, mg.genre_id FROM movies AS m INNER JOIN movies_genres AS mg ON m.movie_id = mg.movie_id WHERE m.movie_id = :movie_id;');
+              
+      // Bind Values
+      $this->db->bind(':movie_id', $movie_id);
+
+      $genres = $this->db->resultSet();
+
+      return $genres;
+    }
+
+    public function getDubbedLanguagesByMovieId($movie_id) {
+      $this->db->query('SELECT dm.id, dm.language_id FROM movies AS m INNER JOIN dubbed_movies AS dm ON m.movie_id = dm.movie_id WHERE m.movie_id = :movie_id;');
+      
+      $this->db->bind(':movie_id', $movie_id);
+
+      $dubbed_languages = $this->db->resultSet();
+
+      return $dubbed_languages;
+    }
+
+    public function getSubtitlesLanguagesByMovieId($movie_id) {
+      $this->db->query('SELECT sm.id, sm.language_id FROM movies AS m INNER JOIN subtitles_movies AS sm ON m.movie_id = sm.movie_id WHERE m.movie_id = :movie_id;');
+      
+      $this->db->bind(':movie_id', $movie_id);
+
+      $dubbed_languages = $this->db->resultSet();
+
+      return $dubbed_languages;
+    }
+
+    public function getAwardsByMovieId($movie_id) {
+      $this->db->query('SELECT awm.id, awm.movie_id, awm.award_id, awm.participant_id, a.name, a.category, p.status FROM award_participant_movie AS awm INNER JOIN awards AS a ON awm.award_id = a.award_id
+      LEFT JOIN participants AS p ON awm.participant_id = p.participant_id WHERE awm.movie_id = :movie_id');
+
+      $this->db->bind(':movie_id', $movie_id);
+
+      $awards = $this->db->resultSet();
+
+      return $awards;
+    }
+
   }
 
