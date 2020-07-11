@@ -38,8 +38,8 @@ header {
   cursor: pointer;
   position: absolute;
   border-radius: 50%;
-  top: -15px;
-  left: 238px;
+  top: 0px;
+  left: 0px;
   outline:none;
   border: 0;
 }
@@ -47,6 +47,16 @@ header {
 .edit-card:focus {
   outline: 0 !important;
 }
+
+/* @media (min-width: 992px) and (max-width: 959px){
+ 
+  .delete-card{
+
+    top: 0px;
+    left: 255px !important;
+  }
+   
+} */
 
 .edit-card{
   /* background-color: #4682B4; */
@@ -61,8 +71,8 @@ header {
   cursor: pointer;
   position: absolute;
   border-radius: 50%;
-  top: 26px;
-  left: 238px;
+  top: 44px;
+  left: 0px;
   outline:none;
   border: 0;
 }

@@ -13,7 +13,7 @@
       return $languages;
     }
 
-    public function addGenre($language) {
+    public function addLanguage($language) {
       $this->db->query('SELECT * FROM languages WHERE language LIKE "%' . $language . '%"');
     
       $row = $this->db->single();

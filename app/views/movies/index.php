@@ -1,75 +1,48 @@
 <?php require APPROOT . '/views/inc/header.php'; ?>
   <?= flash('post_message') ?>
-  <div class="row mb-3">
-    <div class="col-md-6">
-      <h1>Movies</h1>
+  <div class="row justify-content-center mb-3 mx-auto">
+    <div class="col-xl-10 col-lg-10 col-md-9 col-sm-4">
+      <h1 class="text-center">Movies</h1>
     </div>
-    <div class="col-md-6">
+    <div class="col-xl col-lg-1 col-md-1 col-sm-4 align-self-center">
       <a href="<?= URLROOT; ?>/movies/add" class="btn btn-primary pull-right">
         <i class="fas fa-pencil-alt"></i> Add Movie
       </a>
     </div>
   </div>
-  <div class="row justify-content-center col-lg-12 col-sm-6">
-    <div class="col-6">
+  <!-- <div class="row justify-content-center col-lg-12"> -->
+    <div class="mx-auto col-xl-12 col-lg-11 col-md-10 col-sm-8">
         <div class="card mb-5">
           <div class="card-header">
             <div class="row">
-              <h4 class="col-10 text-center">Top 5 popular movies</h4>
-              <button class="btn btn-primary float-right col-2" data-toggle="modal" data-target="#popular-movie-modal">
+              <h4 class="col-lg-9 col-md-9 text-center">Top 5 popular movies</h4>
+              <button class="btn btn-primary float-right col-lg-2 col-md-3" data-toggle="modal" data-target="#popular-movie-modal">
                 <i class="fa fa-plus"></i> movies
               </button>
             </div>
           </div>
             <div class="card-body">
-              <div class="row justify-content-between">
-                <!-- <div class="card col-3 ">
-                  <img src="<?= URLROOT; ?>/img/cars.jpg" alt="" class="card-img-overlay img-fluid">
-                  <div class="card-body">
-                    <p class="class-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequuntur fugit esse magnam!</p>
-                    <a href="#" class="btn btn-primary btn-block">More Books</a>
-                  </div>
-                </div> -->
-
-                <!-- <div class="row row-cols-1 row-cols-md-3"> -->
+              <div class="row justify-content-between justify-content-md-center">
                 <?php foreach ($data['top_5'] as $movieInTop): ?>
                   <?php if($movieInTop): ?>
-                  <div class="col-4 mb-4">
+                  <div class="col-xl col-lg-4 col-md-6 col-sm-8 mb-4">
                     <div class="card h-100">
                       
-                      <img src="<?= URLROOT; ?>/img/<?= $movieInTop->poster?>" class="card-img-top" alt="...">
+                      <img src="<?= URLROOT; ?>/img/posters/<?= $movieInTop->poster?>" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title"><?= $movieInTop->title ?></h5>
                         <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        <button class="button btn-danger delete-card" data-toggle="modal" data-target="#participant-delete-modal-<?= $participant->participant_id ?>">
-                          <i class="far fa-trash-alt" aria-hidden="true"></i>
-                        </button>
-                        <button class="button btn-primary edit-card" data-toggle="modal" data-target="#participant-edit-modal-<?= $participant->participant_id ?>">
-                          <i class="fa fa-edit" aria-hidden="true"></i>
-                        </button>
-                      
+                        
+                        <span class="badge badge-secondary">Genre</span>
                       </div>
                     </div>
+                    <button class="button btn-danger delete-card" data-toggle="modal" data-target="#participant-delete-modal-">
+                      <i class="far fa-trash-alt" aria-hidden="true"></i>
+                    </button>
+                    <button class="button btn-primary edit-card" data-toggle="modal" data-target="#participant-edit-modal-">
+                      <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
                   </div>
-                  <!-- modal to delete -->
-                  <!-- <div class="modal fade" id="participant-delete-modal-<?= $participant->participant_id ?>">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Delete <?= $participant->name ? $participant->name : $participant->title?> in <?= $award->name ?> </h4>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                          <b>Are you sure you want to delete this <?= $data['category_name'] ?>?</b>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-success" data-dismiss="modal" onclick="deleteParticipant('<?= URLROOT; ?>/participants/deleteParticipant/<?= $data['event_id'] ?>', <?= $participant->participant_id ?>, '<?= $award->category ?>','<?= $participant->award_id ?>')">Delete</button>
-                          <button type="button" class="btn btn-danger" data-dismiss="modal" id="logout">Close</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
-                  <!-- end of modal -->
 
                   <?php endif; ?>
                 <?php endforeach; ?>
@@ -107,42 +80,53 @@
           <!-- end of modal -->
         </div>
     </div>
-  </div>
+  <!-- </div> -->
 
   <div class="container-fluid">
-    <div class="row justify-content-center">
-      <div class="col-xl-8 col-lg-6 col-md-8">
+    <!-- <div class="row justify-content-center"> -->
+      <!-- <div class="col-xl-8 col-lg-6 col-md-12"> -->
         <div class="row align-items-center justify-content-center">
           <div class="col-xl-10 col-12 mb-4 mb-xl-0">
             <h3 class="text-muted text-center mb-3">Movies</h3>
-            <table class="table table-striped bg-light text-center">
-              <thead>
-                <tr class="text-muted">
-                  <th>Title</th>
-                  <th>Language</th>
-                  <th>Country</th>
-                  <th>Options</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach($data['movies'] as $movie): ?>
-                  <tr>
-                    <th><?= $movie->title ?></th>
-                    <td><?= $movie->language ?></td>
-                    <td><?= $movie->country ?></td>
-                    <td>
-                      <a href="<?= URLROOT; ?>/movies/edit/<?= $movie->movie_id ?>" class="btn btn-primary"><i class="far fa-edit"></i></a>
-                      <a href="<?= URLROOT; ?>/persons/show/<?= $person->person_id ?>" class="btn btn-primary"><i class="far fa-eye"></i></a>
-                      <a href="<?= URLROOT; ?>/persons/show/<?= $person->person_id ?>" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
-                      <!-- <a href="#" class="btn"><i class="far fa-eye"></a> -->
-                    </td>
+            <div class="table-responsive-sm">
+              <table  id="movies_index_table" class="table table-striped bg-light text-center">
+                <thead>
+                  <tr class="text-muted">
+                    <th class="">Title</th>
+                    <th class="">Language</th>
+                    <th class="">Country</th>
+                    <th class="">Poster</th>
+                    <th class="">Edit</th>
+                    <th class="">View</th>
+                    <th class="">Delete</th>
                   </tr>
-                <?php endforeach; ?>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  <?php foreach($data['movies'] as $movie): ?>
+                    <tr>
+                      <th><?= $movie->title ?></th>
+                      <td><?= $movie->language ?></td>
+                      <td><?= $movie->country ?></td>
+                      <td><?= $movie->poster ?></td>
+                      <td>
+                        <a href="<?= URLROOT; ?>/movies/edit/<?= $movie->movie_id ?>" class="btn btn-primary"><i class="far fa-edit"></i></a>                   
+                        <!-- <a href="#" class="btn"><i class="far fa-eye"></a> -->
+                      </td>
+                      <td>
+                        <a href="<?= URLROOT; ?>/movies/show/<?= $movie->movie_id ?>" class="btn btn-primary"><i class="far fa-eye"></i></a>
+                      </td>
+                      <td>
+                        <a href="<?= URLROOT; ?>/movies/delete/<?= $movie->movie_id ?>" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      <!-- </div> -->
+    <!-- </div> -->
   </div>
+<?php require APPROOT . '/views/inc/pagination.php'; ?>
 <?php require APPROOT . '/views/inc/footer.php'; ?>

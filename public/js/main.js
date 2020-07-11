@@ -120,14 +120,27 @@ $(document).ready(function() {
  
   });
 
-  $("#assign-movie-to-award").click(function () {
-
- 
-  });
-
-  $(document).on('click','.award-status-remove', function(){
+  $('.award-status-remove').click(function(){
     console.log("something");
     $(this).parent().remove();
+  });
+
+  $('.page-item').click(function() {
+    let page = $(this).attr('page');
+    let current_page = parseInt($('.page-item.active').attr('page'));
+
+    if (page == "previous") {
+      current_page -= 1;
+      $( ".page-item[page='" + current_page + "']" ).addClass('active').siblings().removeClass('active');
+      testingArrays(current_page);
+    } else if(page == "next") {
+      current_page += 1;
+      $( ".page-item[page='" + current_page + "']" ).addClass('active').siblings().removeClass('active');
+      testingArrays(current_page);
+    } else {
+      $(this).addClass('active').siblings().removeClass('active');
+      testingArrays(page);
+    }
   });
 
 });
@@ -135,7 +148,7 @@ $(document).ready(function() {
 
 
 function myNewFunction(url) {
-  fn1();
+  // fn1();
 }
 
 function changeTesting(value, list) {

@@ -126,7 +126,7 @@
     }
 
     public function getMovies() {
-      $this->db->query('SELECT m.movie_id, m.title, l.language, c.country FROM movies AS m LEFT JOIN languages AS l ON m.original_language_id = l.language_id LEFT JOIN countries AS c ON m.origin_country_id = c.id;');
+      $this->db->query('SELECT m.movie_id, m.title, m.poster, l.language, c.country FROM movies AS m LEFT JOIN languages AS l ON m.original_language_id = l.language_id LEFT JOIN countries AS c ON m.origin_country_id = c.id;');
       
       $movies = $this->db->resultSet();
 
@@ -235,6 +235,22 @@
       $awards = $this->db->resultSet();
 
       return $awards;
+    }
+
+    public function getNumOfMovies() {
+      $this->db->query('SELECT COUNT(movie_id) AS num_rows FROM movies');
+
+      $num_rows = $this->db->single();
+
+      return $num_rows;
+    }
+
+    public function getMoviesPerPage($limit) {
+      $this->db->query('SELECT m.movie_id, m.title, m.poster, l.language, c.country FROM movies AS m LEFT JOIN languages AS l ON m.original_language_id = l.language_id LEFT JOIN countries AS c ON m.origin_country_id = c.id ' . $limit);
+
+      $moviesPerPage = $this->db->resultSet();
+
+      return $moviesPerPage;
     }
 
   }

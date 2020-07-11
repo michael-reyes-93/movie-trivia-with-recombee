@@ -23,7 +23,7 @@
 
         if ($value['success'])
         {
-          $language_add_response = $this->languageModel->addGenre($_POST['language']);
+          $language_add_response = $this->languageModel->addLanguage($_POST['language']);
           // Validated
           if ($language_add_response) {
             $value['msg1'] = "language added";

@@ -20,18 +20,23 @@
     }
 
     public function index() {
+      $num_rows = $this->movieModel->getNumOfMovies()->num_rows;
+      paginationOptions(array('num_rows' => $num_rows, 'rows_per_page' => 5));
+
       // Get Movies
       //$posts = $this->postModel->getPosts();
-      $movies = $this->movieModel->getMovies();
+      $movies = $this->movieModel->getMoviesPerPage(getLimitPerPage(1));
       $top5Movies = $this->movieModel->getTop5();
+     
 
       $data = [
         'movies' => $movies,
-        'top_5' => $top5Movies
+        'top_5' => $top5Movies,
+        'last_page' => getLastPage(),
       ];
 
       // echo '<pre>';
-      // print_r($data);
+      // print_r($movies);
       // echo '</pre>';
 
       $this->view('movies/index', $data);
@@ -116,11 +121,12 @@
         if (!empty($_FILES['uploaded_poster']['name'])) {
           // Save images in the server
           $folder = 'img/posters/';
-          $uploaded_file = $folder . $_FILES['uploaded_poster']['name'];
+          $poster_name = !empty($data['title']) ? $data['title'] . '.jpg' : 'no-poster-name.jpg';
+          $uploaded_file = $folder . $poster_name;
           move_uploaded_file($_FILES['uploaded_poster']['tmp_name'], $uploaded_file);
           // save image name in server
-          $this->imageModel->addImage($_FILES['uploaded_poster']['name']);
-          $data['poster'] = $_FILES['uploaded_poster']['name'];
+          // $this->imageModel->addImage($_FILES['uploaded_poster']['name']);
+          $data['poster'] = $poster_name;
 
           // $this->deleteImage('delete_image_4.jpg');
         }
@@ -399,12 +405,15 @@
         if (!empty($_FILES['uploaded_poster']['name'])) {
           // Save images in the server
           $folder = 'img/posters/';
-          $uploaded_file = $folder . $_FILES['uploaded_poster']['name'];
+          $poster_name = !empty($data['title']) ? $data['title'] . '.jpg' : 'no-poster-name.jpg';
+          $uploaded_file = $folder . $poster_name;
           move_uploaded_file($_FILES['uploaded_poster']['tmp_name'], $uploaded_file);
-          // save image name in server
-          $this->imageModel->addImage($_FILES['uploaded_poster']['name']);
-          $data['poster'] = $_FILES['uploaded_poster']['name'];
-
+          // save image name in DB
+          $data['poster'] = $poster_name;
+          // $this->imageModel->addImage($data['poster']);
+          // if (file_exists('img/posters/' . $movie->poster)) {
+          //   $this->deleteImage($movie->poster);
+          // }
           // $this->deleteImage('delete_image_4.jpg');
         }
         if (empty($data['poster'])) {
@@ -625,12 +634,8 @@
 
         } else {
           echo '<pre>';
-          print_r($data['awards_status']);
-          // print_r($this->updateArraysInDB($movie_id, $this->genresToArray($genres), $data['genres']));
-          // print_r($this->updateArraysInDB($movie_id, $this->languagesToArray($dubbed_languages), $data['dubbed_languages']));
-          // print_r($this->updateArraysInDB($movie_id, $this->languagesToArray($subtitle_languages), $data['subtitle_languages']));
-          print_r($this->updateAwardsInDB($movie_id, $this->awardsStatusToArray($awards_status), $data['awards_status']));
-          print_r($this->updateStatusInDB($movie_id, $this->awardsStatusToArray($awards_status), $data['awards_status']));
+          echo $data['poster'] . '<br>';
+          echo "Old Poster: " . $movie->poster . '<br>';
           echo '</pre>';
 
           // Load view with errors
@@ -711,6 +716,30 @@
       echo $output;
     }
 
+    public function moviesPerPageToArray() {
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $new_arr = [];
+        $moviesPerPage = $this->movieModel->getMoviesPerPage(getLimitPerPage((int)$_POST['page']));
+        foreach($moviesPerPage as $movie) {
+          array_push($new_arr, 
+            array(
+              'movie_id' => $movie->movie_id,
+              'title' => $movie->title,
+              'poster' => $movie->poster,
+              'language' => $movie->language,
+              'country' => $movie->country
+            )
+          );
+        }
+
+        header('Content-Type: application/json');
+        $output = json_encode($new_arr);
+        echo $output;
+      } else {
+        // no post executed
+      }
+    }
+
     private function modal($test) {
       
       return "<script>alert(" . $test . "); </script>";
@@ -728,7 +757,7 @@
               'id' => $key < count($arr1) - count($arr3) ? 'x' : $arr3[$key - (count($arr1) - count($arr3))]->award_id
             )
           );
-        } else if (!empty($arr1) && !empty($arr2)) {
+        } elseif (!empty($arr1) && !empty($arr2)) {
           array_push($new_arr, array(
             'award_id' => $arr1[$key], 
             'status' => $arr2[$key])
@@ -757,8 +786,8 @@
       return in_array(false, $results) ? false : true;
     }
 
-    private function deleteImage($image_name) {
-      unlink('img/' . $image_name);
+    private function deleteOldPoster($image_name) {
+      unlink('img/posters/' . $image_name);
     }
     
     private function castToArray($cast) {

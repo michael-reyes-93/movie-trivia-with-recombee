@@ -167,6 +167,7 @@ function addMovieToTop5(url) {
 
 function assignMovieToAward(url) {
   url = url + '/movies/movieAwardsList';
+  console.log(url);
   
   $.get(url)
   .done(function(data, textStatus, jqXHR) {
@@ -187,11 +188,33 @@ function assignMovieToAward(url) {
   });
 }
 
+function testingArrays(page) {
+  let url = $('.pagination').attr('url');
+  let url2 = url + '/movies/moviesPerPageToArray';
+
+  $.post(url2, {page: page})
+  .done(function(data, textStatus, jqXHR) {
+    $('#movies_index_table tbody').empty();
+    console.log(data);
+    data.forEach(movie => {
+      $('#movies_index_table tbody').append('<tr><th>' + movie.title + '</th><td>--language--</td><td>--country--</td><td>--poster--</td><td><a href="' + url + '/movies/edit/' + movie.movie_id + '" class="btn btn-primary"><i class="far fa-edit"></i></a></td><td><a href="' + url + '/movies/show/' + movie.movie_id + '" class="btn btn-primary"><i class="far fa-eye"></i></a></td><td><a href="' + url + '/movies/delete/' + movie.movie_id + '" class="btn btn-danger"><i class="far fa-trash-alt"></i></a></td></tr>');
+    });
+    
+    // window.location.href = data.redirect;
+    
+  }).fail(function(jqXHR, textStatus, errorThrown) 
+  {
+    console.log(jqXHR.responseText);
+    //failed
+  });
+}
+
 function fn1() {
   alert("external fn clicked");
 }
 
 $(document).ready(function(){
+  //testingArrays();
 
   $("#country_add").click(function(){
     // console.log("HELLO");

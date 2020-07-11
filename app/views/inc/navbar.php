@@ -6,7 +6,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav col-lg-9 mr-auto">
         <li class="nav-item">
           <a class="nav-link" href="<?= URLROOT; ?>">Home</a>
         </li>
@@ -24,6 +24,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<?= URLROOT; ?>/events">Events</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= URLROOT; ?>/gallery">Gallery</a>
         </li>
       </ul>
       

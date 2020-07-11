@@ -51,7 +51,7 @@
         if (empty($data['name_singer_group'])) {
           if (!empty($data['selection_singer_group_err'])) {
             $data['name_singer_group_err'] = 'Please enter a name for the group or singer';
-          } else if ($data['selection_singer_group'] == 1) {
+          } elseif ($data['selection_singer_group'] == 1) {
             $data['name_singer_group_err'] = 'Please enter a name for the singer';
           } else {
             $data['name_singer_group_err'] = 'Please enter a name for the group';

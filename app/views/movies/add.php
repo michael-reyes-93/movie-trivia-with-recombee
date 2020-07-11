@@ -267,6 +267,7 @@
         <br>
         <br>
         <!-- awards - status -->
+        <div id="awards-with-status" class="mt-3">
         <?php if(!empty($data['awards_status'])): ?>
           <?php foreach($data['awards_status'] as $award_status): ?>
             <div class="form-row align-items-center">
@@ -293,7 +294,7 @@
             </div>
           <?php endforeach ?>
         <?php endif ?>
-
+        </div>
         <!-- end of awards - status -->
         <div class="form-row">
           <div class="col-4 mb-3">     
