@@ -195,7 +195,7 @@ function testingArrays(page) {
   $.post(url2, {page: page})
   .done(function(data, textStatus, jqXHR) {
     $('#movies_index_table tbody').empty();
-    console.log(data);
+    // console.log(data);
     data.forEach(movie => {
       $('#movies_index_table tbody').append('<tr><th>' + movie.title + '</th><td>--language--</td><td>--country--</td><td>--poster--</td><td><a href="' + url + '/movies/edit/' + movie.movie_id + '" class="btn btn-primary"><i class="far fa-edit"></i></a></td><td><a href="' + url + '/movies/show/' + movie.movie_id + '" class="btn btn-primary"><i class="far fa-eye"></i></a></td><td><a href="' + url + '/movies/delete/' + movie.movie_id + '" class="btn btn-danger"><i class="far fa-trash-alt"></i></a></td></tr>');
     });

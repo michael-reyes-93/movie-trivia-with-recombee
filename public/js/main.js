@@ -130,16 +130,39 @@ $(document).ready(function() {
     let current_page = parseInt($('.page-item.active').attr('page'));
 
     if (page == "previous") {
-      current_page -= 1;
-      $( ".page-item[page='" + current_page + "']" ).addClass('active').siblings().removeClass('active');
-      testingArrays(current_page);
+      if(current_page > 1) {
+        current_page -= 1;
+        $( ".page-item[page='" + current_page + "']" ).addClass('active').siblings().removeClass('active');
+        testingArrays(current_page);
+      } else {
+        $(".page-item[page='previous']").hide();
+      }
     } else if(page == "next") {
-      current_page += 1;
-      $( ".page-item[page='" + current_page + "']" ).addClass('active').siblings().removeClass('active');
-      testingArrays(current_page);
+      if (current_page < parseInt($(this).attr('limit'))) {
+        current_page += 1;
+        $( ".page-item[page='" + current_page + "']" ).addClass('active').siblings().removeClass('active');
+        testingArrays(current_page);
+      } else {
+        $(".page-item[page='next']").hide();
+      }
     } else {
       $(this).addClass('active').siblings().removeClass('active');
       testingArrays(page);
+    }
+  });
+
+  $('.page-item').click(function() {
+    let current_page = parseInt($('.page-item.active').attr('page'));
+    let limit = parseInt($(".page-item[page='next']").attr('limit'));
+    if (current_page < limit) {
+      if ($(".page-item[page='next']").is(":hidden")) {
+        $(".page-item[page='next']").show();
+      }
+    }
+    if (current_page > 1) {
+      if ($(".page-item[page='previous']").is(":hidden")) {
+        $(".page-item[page='previous']").show();
+      }
     }
   });
 
