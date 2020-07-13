@@ -71,4 +71,47 @@
       return $soundtracks;
     }
     
+    public function addSoundtrackToMovie($soundtrack_id, $movie_id) {   
+      $this->db->query('INSERT INTO movies_soundtracks (soundtrack_id, movie_id) VALUES (:soundtrack_id, :movie_id)');
+              
+      // Bind Values
+      $this->db->bind(':soundtrack_id', $soundtrack_id);
+      $this->db->bind(':movie_id', $movie_id);
+
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    public function updateSoundtrackInMovie($table_id, $new_soundtrack_id) {   
+      $this->db->query('UPDATE movies_soundtracks SET soundtrack_id = :new_soundtrack_id WHERE id = :table_id');
+              
+      // Bind Values
+      $this->db->bind(':new_soundtrack_id', $new_soundtrack_id);
+      $this->db->bind(':table_id', $table_id);
+
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
+
+    public function deleteSoundtrackInMovie($table_id) {   
+      $this->db->query('DELETE FROM movies_soundtracks WHERE id = :table_id');
+
+      // Bind Values
+      $this->db->bind(':table_id', $table_id);
+
+      // Execute
+      if ($this->db->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
   }

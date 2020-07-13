@@ -1,5 +1,19 @@
 $(document).ready(function() {
 
+  $('.gallery-list-item').click(function() {
+    let value = $(this).attr('data-filter');
+    if (value === 'all') {
+      $('.filter').show(300);
+    } else {
+      $('.filter').not('.' + value).hide(300);
+      $('.filter').filter('.' + value).show(300);
+    }
+  });
+
+  $('.gallery-list-item').click(function() {
+    $(this).addClass('active-item').siblings().removeClass('active-item');
+  });
+
   // $("#add-awards").click(function () {
   //   let award_div = `<div class="form-row align-items-center award-div">
   //   <div class="form-group col-lg-10">

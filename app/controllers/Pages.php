@@ -6,7 +6,7 @@
     }
 
     public function index() {
-      $movies = $this->movieModel->getMovies();
+      $movies = $this->movieModel->getMoviesCatalog();
       $top5Movies = $this->movieModel->getTop5();
 
       $data = [

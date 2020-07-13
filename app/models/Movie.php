@@ -166,7 +166,7 @@
     }
 
     public function getCastByMovieId($movie_id) {
-      $this->db->query('SELECT c.actor_id FROM movies AS m INNER JOIN cast AS c ON m.movie_id = c.movie_id WHERE m.movie_id = :movie_id;');
+      $this->db->query('SELECT c.cast_id, c.actor_id FROM movies AS m INNER JOIN cast AS c ON m.movie_id = c.movie_id WHERE m.movie_id = :movie_id;');
 
       $this->db->bind(':movie_id', $movie_id);
 
@@ -176,7 +176,7 @@
     }
 
     public function getProducersByMovieId($movie_id) {
-      $this->db->query('SELECT p.producer_id FROM movies AS m INNER JOIN producers AS p ON m.movie_id = p.movie_id WHERE m.movie_id = :movie_id;');
+      $this->db->query('SELECT p.id, p.producer_id FROM movies AS m INNER JOIN producers AS p ON m.movie_id = p.movie_id WHERE m.movie_id = :movie_id;');
 
       $this->db->bind(':movie_id', $movie_id);
 
@@ -186,7 +186,7 @@
     }
 
     public function getSoundtracksByMovieId($movie_id) {
-      $this->db->query('SELECT ms.soundtrack_id FROM movies AS m INNER JOIN movies_soundtracks AS ms ON m.movie_id = ms.movie_id WHERE m.movie_id = :movie_id;');
+      $this->db->query('SELECT ms.id, ms.soundtrack_id FROM movies AS m INNER JOIN movies_soundtracks AS ms ON m.movie_id = ms.movie_id WHERE m.movie_id = :movie_id;');
       
       $this->db->bind(':movie_id', $movie_id);
 
@@ -253,5 +253,12 @@
       return $moviesPerPage;
     }
 
+    public function getMoviesCatalog() {
+      $this->db->query('SELECT movie_id, catalog_photo FROM movies LIMIT 13');
+
+      $moviesCatalog = $this->db->resultSet();
+
+      return $moviesCatalog;
+    }
   }
 

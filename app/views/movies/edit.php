@@ -55,7 +55,7 @@
           <div class="col-7 d-flex align-items-end">
             <div class="col">
               <div class="d-flex justify-content-center">
-                <img id="catalog-photo-preview" src="<?= $data['catalog_photo_src'] ?>" style="width:341px;height:192px;" alt="your image"/>
+                <img id="catalog-photo-preview" src="<?= (!empty($data['catalog_photo'])) ? URLROOT . '/img/catalog/' . $data['catalog_photo'] : $data['catalog_photo_src'] ?>" style="width:341px;height:192px;" alt="your image"/>
               </div>
               <div class="text-center">
                 Catalog Image Preview
@@ -265,37 +265,37 @@
         <b id="awards-note">If the award is not in the list, please add it inside the corresponding event. You can edit an existing event or add a new event</b> 
         <!-- awards - status -->
         <div id="awards-with-status" class="mt-3">
-        <?php if(!empty($data['awards_status'])): ?>
-          <?php foreach($data['awards_status'] as $award_status): ?>
-            <div class="form-row align-items-center">
-              <div class="form-group col-lg-7">
-                <label for="movie_awards"> Award 1: <sup>*</sup></label>
-                <select class="selectpicker form-control <?= (!empty($data['countries_err'])) ? 'is-invalid' : ''; ?>" name="movie_awards[]" data-actions-box="true" data-live-search="true">
-                <?php foreach($data['movie_awards_list'] as $movie_award): ?>
-                  <?php if (!empty($award_status->award_id)): ?>
-                    <option <?= $award_status->award_id == $movie_award->award_id ? 'selected' : ''; ?> value="<?= $movie_award->award_id ?>"><?= $movie_award->name ?></option>
-                  <?php else: ?>
-                    <option <?= $award_status['award_id'] == $movie_award->award_id ? 'selected' : ''; ?> value="<?= $movie_award->award_id ?>"><?= $movie_award->name ?></option>  
-                  <?php endif; ?>
-                  <?php endforeach; ?>
-              </select>
+          <?php if(!empty($data['awards_status'])): ?>
+            <?php foreach($data['awards_status'] as $award_status): ?>
+              <div class="form-row align-items-center">
+                <div class="form-group col-lg-7">
+                  <label for="movie_awards"> Award 1: <sup>*</sup></label>
+                  <select class="selectpicker form-control <?= (!empty($data['countries_err'])) ? 'is-invalid' : ''; ?>" name="movie_awards[]" data-actions-box="true" data-live-search="true">
+                    <?php foreach($data['movie_awards_list'] as $movie_award): ?>
+                      <?php if (!empty($award_status->award_id)): ?>
+                        <option <?= $award_status->award_id == $movie_award->award_id ? 'selected' : ''; ?> value="<?= $movie_award->award_id ?>"><?= $movie_award->name ?></option>
+                      <?php else: ?>
+                        <option <?= $award_status['award_id'] == $movie_award->award_id ? 'selected' : ''; ?> value="<?= $movie_award->award_id ?>"><?= $movie_award->name ?></option>  
+                      <?php endif; ?>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+                <div class="form-group col-lg-4">
+                  <label for="status">status in participation: </label>
+                  <select class="col-6 selectpicker form-control" data-actions-box="true" name="status[]">
+                    <?php if (!empty($award_status->status)): ?>
+                      <option <?= $award_status->status == 'nominated' ? 'selected' : '' ?> value="nominated">nominated</option>
+                      <option <?= $award_status->status == 'winner' ? 'selected' : '' ?> value="winner">winner</option>
+                    <?php else: ?>
+                      <option <?= $award_status['status'] == 'nominated' ? 'selected' : '' ?> value="nominated">nominated</option>
+                      <option <?= $award_status['status'] == 'winner' ? 'selected' : '' ?> value="winner">winner</option>
+                    <?php endif; ?>
+                  </select>
+                </div>
+                <button type="button" class="btn btn-danger award-status-remove"><i class="fas fa-minus-circle"></i></button>
               </div>
-              <div class="form-group col-lg-4">
-                <label for="status">status in participation: </label>
-                <select class="col-6 selectpicker form-control" data-actions-box="true" name="status[]">
-                  <?php if (!empty($award_status->status)): ?>
-                    <option <?= $award_status->status == 'nominated' ? 'selected' : '' ?> value="nominated">nominated</option>
-                    <option <?= $award_status->status == 'winner' ? 'selected' : '' ?> value="winner">winner</option>
-                  <?php else: ?>
-                    <option <?= $award_status['status'] == 'nominated' ? 'selected' : '' ?> value="nominated">nominated</option>
-                    <option <?= $award_status['status'] == 'winner' ? 'selected' : '' ?> value="winner">winner</option>
-                  <?php endif; ?>
-                </select>
-              </div>
-              <button type="button" class="btn btn-danger award-status-remove"><i class="fas fa-minus-circle"></i></button>
-            </div>
-          <?php endforeach ?>
-        <?php endif ?>
+            <?php endforeach ?>
+          <?php endif ?>
         </div>
         <!-- end of awards - status -->
         <div class="form-row">

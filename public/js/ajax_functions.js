@@ -190,17 +190,26 @@ function assignMovieToAward(url) {
 
 function testingArrays(page) {
   let url = $('.pagination').attr('url');
-  let url2 = url + '/movies/moviesPerPageToArray';
 
-  $.post(url2, {page: page})
+  $.post(url, {page: page})
   .done(function(data, textStatus, jqXHR) {
-    $('#movies_index_table tbody').empty();
-    // console.log(data);
-    data.forEach(movie => {
-      $('#movies_index_table tbody').append('<tr><th>' + movie.title + '</th><td>--language--</td><td>--country--</td><td>--poster--</td><td><a href="' + url + '/movies/edit/' + movie.movie_id + '" class="btn btn-primary"><i class="far fa-edit"></i></a></td><td><a href="' + url + '/movies/show/' + movie.movie_id + '" class="btn btn-primary"><i class="far fa-eye"></i></a></td><td><a href="' + url + '/movies/delete/' + movie.movie_id + '" class="btn btn-danger"><i class="far fa-trash-alt"></i></a></td></tr>');
+    let table_titles = '';
+    let table_data = '';
+
+    $('.index_table thead').empty();
+    $('.index_table tbody').empty();
+    console.log(data);
+
+    data.titles.forEach(table_title => {
+      table_titles += '<th>' + table_title + '</th>';
     });
     
-    // window.location.href = data.redirect;
+    data.table_data.forEach(function(table_row, indx) {
+      table_data += table_row;
+    });
+    
+    $('.index_table thead').append('<tr class="text-muted">' + table_titles + '</tr>');
+    $('.index_table tbody').append('<tr>' + table_data + '</tr>');
     
   }).fail(function(jqXHR, textStatus, errorThrown) 
   {

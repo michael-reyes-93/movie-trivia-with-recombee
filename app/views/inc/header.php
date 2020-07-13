@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="<?= URLROOT; ?>/css/style.css">
     <link rel="stylesheet" href="<?= URLROOT; ?>/css/carousel.css">
     <link rel="stylesheet" href="<?= URLROOT; ?>/css/star-rating.css">
-    <!-- <link rel="stylesheet" href="<?= URLROOT; ?>/css/custom.css"> -->
+    <link rel="stylesheet" href="<?= URLROOT; ?>/css/custom.css">
     <title><?= SITENAME; ?></title>
     <!-- <style>
     .card-shadow {

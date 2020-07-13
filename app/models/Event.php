@@ -12,7 +12,6 @@
 
       return $events;
     }
-
     
     public function getEventById($id) {
       $this->db->query('SELECT * FROM events WHERE event_id = :id');
@@ -53,5 +52,21 @@
       } else {
         return false;
       }
+    }
+
+    public function getNumOfMovies() {
+      $this->db->query('SELECT COUNT(event_id) AS num_rows FROM events');
+
+      $num_rows = $this->db->single();
+
+      return $num_rows;
+    }
+
+    public function getEventsPerPage($limit) {
+      $this->db->query('SELECT e.event_id, e.name, e.year FROM events AS e ' . $limit);
+
+      $eventsPerPage = $this->db->resultSet();
+
+      return $eventsPerPage;
     }
   }

@@ -1,5 +1,5 @@
 /* navbar custom breakpoint */
-@media (min-width: 1300px){
+/* @media (min-width: 1300px){
   .navbar-expand-custom {
       flex-direction: row;
       flex-wrap: nowrap;
@@ -18,5 +18,9 @@
   .navbar-expand-custom .navbar-toggler {
       display: none;
   }
-}
+} */
 /* end of navbar custom breakpoint */
+
+.add-button {
+  position: absolute;
+}

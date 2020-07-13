@@ -1,6 +1,6 @@
 <nav aria-label="Page navigation example">
-  <ul class="pagination justify-content-center" url="<?= URLROOT ?>">
-    <li class="page-item" page="previous"> <!-- disabled -->
+  <ul class="pagination justify-content-center" url="<?= $data['url'] ?>">
+    <li class="page-item" page="previous" style="display: none"> <!-- disabled -->
       <a class="page-link">Previous</a>
     </li>
     <?php for ($i=1; $i <= getLastPage(); $i++): ?>

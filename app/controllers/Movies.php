@@ -9,6 +9,8 @@
       $this->movieModel = $this->model('Movie');
       $this->soundtrackModel = $this->model('Soundtrack');
       $this->countryModel = $this->model('Country');
+      $this->castModel = $this->model('Cast');
+      $this->producerModel = $this->model('Producer');
       $this->genreModel = $this->model('Genre');
       $this->awardModel = $this->model('Award');
       $this->languageModel = $this->model('Language');
@@ -32,7 +34,7 @@
       $data = [
         'movies' => $movies,
         'top_5' => $top5Movies,
-        'last_page' => getLastPage(),
+        'url' => URLROOT . '/movies/moviesPerPageToArray'
       ];
 
       // echo '<pre>';
@@ -540,6 +542,57 @@
             //     $this->participantModel->addParticipantToAward($award_status['status'], $movie_id, $award_status['award_id'], 'm');
             //   }
             // }
+
+            $cast_actions_to_do = $this->updateArraysInDB($movie_id, $this->castToArray($cast), $data['cast']);
+            if (!empty($cast_actions_to_do['update'])) {
+              foreach($cast_actions_to_do['update'] as $cast_update) {
+                $this->castModel->updateActorInMovie($cast_update['table_id'], $cast_update['new_id']);
+              }
+            }
+            if (!empty($cast_actions_to_do['delete'])) {
+              foreach($cast_actions_to_do['delete'] as $cast_delete) {
+                $this->castModel->deleteActorInMovie($cast_delete, $movie_id);
+              }
+            }
+            if (!empty($cast_actions_to_do['insert'])) {
+              foreach($cast_actions_to_do['insert'] as $actor_id) {
+                $this->castModel->addActorToMovie($actor_id, $movie_id);
+              }
+            }
+
+            $producers_actions_to_do = $this->updateArraysInDB($movie_id, $this->producersToArray($producers), $data['producers']);
+            if (!empty($producers_actions_to_do['delete'])) {
+              foreach($producers_actions_to_do['delete'] as $producer_delete) {
+                $this->producerModel->deleteProducerInMovie($producer_delete);
+              }
+            }
+            if (!empty($producers_actions_to_do['update'])) {
+              foreach($producers_actions_to_do['update'] as $producer_update) {
+                $this->producerModel->updateProducerInMovie($producer_update['table_id'], $producer_update['new_id']);
+              }
+            }
+            if (!empty($producers_actions_to_do['insert'])) {
+              foreach($producers_actions_to_do['insert'] as $producer_id) {
+                $this->producerModel->addProducerToMovie($producer_id, $movie_id);
+              }
+            }
+
+            $soundtracks_actions_to_do = $this->updateArraysInDB($movie_id, $this->soundtracksToArray($soundtracks), $data['soundtracks']);
+            if (!empty($soundtracks_actions_to_do['delete'])) {
+              foreach($soundtracks_actions_to_do['delete'] as $soundtrack_delete) {
+                $this->soundtrackModel->deleteSoundtrackInMovie($soundtrack_delete);
+              }
+            }
+            if (!empty($soundtracks_actions_to_do['update'])) {
+              foreach($soundtracks_actions_to_do['update'] as $soundtrack_update) {
+                $this->soundtrackModel->updateSoundtrackInMovie($soundtrack_update['table_id'], $soundtrack_update['new_id']);
+              }
+            }
+            if (!empty($soundtracks_actions_to_do['insert'])) {
+              foreach($soundtracks_actions_to_do['insert'] as $soundtrack_id) {
+                $this->soundtrackModel->addSoundtrackToMovie($soundtrack_id, $movie_id);
+              }
+            }
             
             $genres_actions_to_do = $this->updateArraysInDB($movie_id, $this->genresToArray($genres), $data['genres']);
             if (!empty($genres_actions_to_do['update'])) {
@@ -633,10 +686,10 @@
           $this->view('movies/edit', $data);
 
         } else {
-          echo '<pre>';
-          echo $data['poster'] . '<br>';
-          echo "Old Poster: " . $movie->poster . '<br>';
-          echo '</pre>';
+          // echo '<pre>';
+          // // print_r($this->updateArraysInDB($movie_id, $this->soundtracksToArray($soundtracks), $data['soundtracks']));
+          // print_r($this->updateArraysInDB($movie_id, $this->soundtracksToArray($soundtracks), $data['soundtracks']));
+          // echo '</pre>';
 
           // Load view with errors
           $this->view('movies/edit', $data);
@@ -655,10 +708,10 @@
           'budget' => $movie->budget,
           'return_of_investment' => $movie->return_of_investment,
           'director' => $movie->director_id,
-          'cast' => $this->castToArray($cast),
-          'producers' => $this->producersToArray($producers),
+          'cast' => $this->castToArray($cast)['ids'],
+          'producers' => $this->producersToArray($producers)['ids'],
           'music_director' => $movie->music_director,
-          'soundtracks' => $this->soundtracksToArray($soundtracks),
+          'soundtracks' => $this->soundtracksToArray($soundtracks)['ids'],
           'rating' => $movie->raiting,
           'genres' => $this->genresToArray($genres)['ids'],
           'original_language' => $movie->original_language_id,
@@ -677,11 +730,9 @@
           'movie_awards_list' => $moviesAwardsAvaible
         ];
 
-        echo '<pre>';
-        print_r($awards_status);
-        print_r($this->awardsStatusToArray($awards_status));
-        print_r($data['awards_status']);
-        echo '</pre>';
+        // echo '<pre>';
+        // print_r($data['catalog_photo']);
+        // echo '</pre>';
 
         $this->view('movies/edit', $data);
       }
@@ -718,18 +769,14 @@
 
     public function moviesPerPageToArray() {
       if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $new_arr = [];
+        $new_arr = ['titles' => [], 'table_data' => []];
+
+        $new_arr['titles'] = array('Title', 'Language', 'Country', 'Poster', 'Edit', 'View', 'Delete');
+
         $moviesPerPage = $this->movieModel->getMoviesPerPage(getLimitPerPage((int)$_POST['page']));
         foreach($moviesPerPage as $movie) {
-          array_push($new_arr, 
-            array(
-              'movie_id' => $movie->movie_id,
-              'title' => $movie->title,
-              'poster' => $movie->poster,
-              'language' => $movie->language,
-              'country' => $movie->country
-            )
-          );
+          $table_row = '<tr><th>' . $movie->title . '</th><td>' . $movie->language . '</td><td>' . $movie->country . '</td><td>' . $movie->poster . '</td><td><a href="' . URLROOT . '/movies/edit/' . $movie->movie_id . '" class="btn btn-primary"><i class="far fa-edit"></i></a></td><td><a href="' . URLROOT . '/movies/show/' . $movie->movie_id . '" class="btn btn-primary"><i class="far fa-eye"></i></a></td><td><a href="' . URLROOT . '/movies/delete/' . $movie->movie_id . '" class="btn btn-danger"><i class="far fa-trash-alt"></i></a></td></tr>';
+          array_push($new_arr['table_data'], $table_row);
         }
 
         header('Content-Type: application/json');
@@ -791,25 +838,28 @@
     }
     
     private function castToArray($cast) {
-      $new_arr = [];
+      $new_arr = array('table_ids' => [], 'ids' => []);
       foreach($cast as $cast_member) {
-        array_push($new_arr, $cast_member->actor_id);
+        array_push($new_arr['ids'], $cast_member->actor_id);
+        array_push($new_arr['table_ids'], $cast_member->cast_id);
       }
       return $new_arr;
     }
 
     private function producersToArray($producers) {
-      $new_arr = [];
+      $new_arr = array('table_ids' => [], 'ids' => []);
       foreach($producers as $producer) {
-        array_push($new_arr, $producer->producer_id);
+        array_push($new_arr['ids'], $producer->producer_id);
+        array_push($new_arr['table_ids'], $producer->id);
       }
       return $new_arr;
     }
 
     private function soundtracksToArray($soundtracks) {
-      $new_arr = [];
+      $new_arr = array('table_ids' => [], 'ids' => []);
       foreach($soundtracks as $soundtrack) {
-        array_push($new_arr, $soundtrack->soundtrack_id);
+        array_push($new_arr['ids'], $soundtrack->soundtrack_id);
+        array_push($new_arr['table_ids'], $soundtrack->id);
       }
       return $new_arr;
     }
